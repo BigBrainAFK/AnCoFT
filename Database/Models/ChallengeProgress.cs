@@ -10,7 +10,7 @@
 
         public short Success { get; set; }
 
-        public byte Attempts { get; set; }
+        public short Attempts { get; set; }
 
         [ForeignKey("ChallengeId")]
         public Challenge Challenge { get; set; }

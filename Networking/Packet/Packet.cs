@@ -1,4 +1,6 @@
-﻿namespace AnCoFT.Networking.Packet
+﻿using AnCoFT.Game.MatchPlay.Room;
+
+namespace AnCoFT.Networking.Packet
 {
     using System;
     using System.Collections.Generic;
@@ -404,7 +406,7 @@
     public class S2CGameServerListPacket : Packet
     {
         public S2CGameServerListPacket(List<GameServer> gameServerList)
-            : base(Networking.Packet.PacketId.S2CGameserverList)
+            : base(Networking.Packet.PacketId.S2CGameServerList)
         {
             this.Write((short)gameServerList.Count);
             for (int x = 0; x < gameServerList.Count; x++)
@@ -474,7 +476,6 @@
             this.Write((ushort)tutorialProgress.Count);
             for (int i = 0; i < tutorialProgress.Count; i++)
             {
-                this.Write((ushort)i);
                 this.Write((ushort)tutorialProgress[i].TutorialId);
                 this.Write(Convert.ToUInt16(tutorialProgress[i].Success));
                 this.Write(Convert.ToUInt16(tutorialProgress[i].Attempts));
@@ -493,6 +494,19 @@
         public short ChallengeId { get; set; }
     }
 
+    public class C2SChallengeHpPacket : Packet
+    {
+        public C2SChallengeHpPacket(Packet packet)
+            : base(packet)
+        {
+            this.NpcHp = this.ReadShort();
+            this.PlayerHp = this.ReadShort();
+        }
+        
+        public short NpcHp { get; set; }
+        public short PlayerHp { get; set; }
+    }
+
     public class C2SChallengePointPacket : Packet
     {
         public C2SChallengePointPacket(Packet packet)
@@ -505,6 +519,20 @@
         public byte PointsPlayer { get; set; }
 
         public byte PointsNpc { get; set; }
+    }
+
+    public class C2SChallengeDamagePacket : Packet
+    {
+        public C2SChallengeDamagePacket(Packet packet)
+            : base(packet)
+        {
+            this.Player = packet.ReadByte();
+            this.Hp = packet.ReadInteger();
+        }
+
+        public byte Player { get; set; }
+
+        public int Hp { get; set; }
     }
 
     public class S2CChallengeFinishPacket : Packet
@@ -522,6 +550,290 @@
             // To Do:
             foreach (ItemReward reward in itemReward)
             {
+            }
+        }
+    }
+
+    public class C2STutorialEndPacket : Packet
+    {
+        public C2STutorialEndPacket(Packet packet)
+            : base(packet)
+        {
+            this.TutorialId = this.ReadByte();
+        }
+
+        public byte TutorialId { get; set; }
+    }
+
+    public class C2SRoomCreatePacket : Packet
+    {
+        public C2SRoomCreatePacket(Packet packet)
+            : base(packet)
+        {
+            this.Name = this.ReadUnicodeString();
+            this.Type = this.ReadByte();
+            this.GameMode = this.ReadByte();
+            this.Rule = this.ReadByte();
+            this.Players = this.ReadByte();
+            this.Private = Convert.ToBoolean(this.ReadByte());
+            this.Unknown = this.ReadByte();
+            this.SkillFree = Convert.ToBoolean(this.ReadByte());
+            this.QuickSlot = Convert.ToBoolean(this.ReadByte());
+            this.LevelRange = this.ReadByte();
+            this.BettingType = this.ReadShort();
+            this.BettingAmount = this.ReadInteger();
+            this.Ball = this.ReadInteger();
+
+            if (this.Private)
+                this.Password = this.ReadUnicodeString();
+        }
+
+        public string Name { get; set; }
+        public byte Type { get; set; }
+        public byte GameMode { get; set; }
+        public byte Rule { get; set; }
+        public byte Players { get; set; }
+        public bool Private { get; set; }
+        public byte Unknown { get; set; }
+        public bool SkillFree { get; set; }
+        public bool QuickSlot { get; set; }
+        public byte LevelRange { get; set; }
+        public short BettingType { get; set; }
+        public int BettingAmount { get; set; }
+        public int Ball { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class C2SRoomJoinPacket : Packet
+    {
+        public C2SRoomJoinPacket(Packet packet)
+            : base(packet)
+        {
+            this.RoomId = this.ReadShort();
+        }
+
+        public short RoomId { get; set; }
+    }
+
+    public class S2CRoomJoinAnswer : Packet
+    {
+        public S2CRoomJoinAnswer(short result, byte roomType, byte unknown, byte unknown2)
+            : base(Networking.Packet.PacketId.S2CRoomJoinAnswer)
+        {
+            this.Write(result);
+            this.Write(roomType);
+            this.Write(unknown);
+            this.Write(unknown2);
+        }
+    }
+
+    public class S2CRoomInformation : Packet
+    {
+        public S2CRoomInformation(Room room)
+            : base(Networking.Packet.PacketId.S2CRoomInformation)
+        {
+            this.Write(room.Id);
+            this.Write(room.Name);
+            this.Write((short) 0);
+            this.Write((byte)0); // Battlemon
+            this.Write(room.GameMode);
+            this.Write(room.Betting);
+            this.Write(room.BettingMode);
+            this.Write(room.BettingCoins);
+            this.Write(room.BettingGold);
+            this.Write(room.MaxPlayer);
+            this.Write(room.Private);
+            this.Write(room.Level);
+            this.Write(room.LevelRange);
+            this.Write((byte)0); // Unknown
+            this.Write(room.Map);
+            this.Write((byte)0); // Unknown
+            this.Write((byte)0); // Unknown
+            this.Write(room.Ball); // Unknown
+        }
+    }
+
+    public class C2SRoomReadyChangePacket : Packet
+    {
+        public C2SRoomReadyChangePacket(Packet packet)
+            : base(packet)
+        {
+            this.Ready = this.ReadByte();
+        }
+
+        public byte Ready { get; set; }
+    }
+
+    public class C2SRoomPositionChange : Packet
+    {
+        public C2SRoomPositionChange(Packet packet)
+            : base(packet)
+        {
+            this.NewPosition = this.ReadShort();
+        }
+
+        public short NewPosition { get; set; }
+    }
+
+    public class S2CRoomPositionChangeAnswer : Packet
+    {
+        public S2CRoomPositionChangeAnswer(short result, short oldPosition, short newPosition)
+            : base(Networking.Packet.PacketId.S2CRoomPositionChangeAnswer)
+        {
+            this.Write(result);
+            this.Write(oldPosition);
+            this.Write(newPosition);
+        }
+    }
+    public class S2CRoomPlayerInformation : Packet
+    {
+        public S2CRoomPlayerInformation(List<RoomPlayer> roomPlayers)
+            : base(Networking.Packet.PacketId.S2CRoomPlayerInformation)
+        {
+            this.Write((short)roomPlayers.Count);
+            foreach (RoomPlayer rp in roomPlayers)
+            {
+                this.Write((short) rp.Position);
+                this.Write(rp.Character.Name);
+                this.Write((short) 0);
+                this.Write((byte) 0);
+                this.Write((byte) 0);
+                this.Write(Convert.ToByte(rp.Master)); // Master
+                this.Write(Convert.ToByte(rp.Ready)); // Ready
+                this.Write((byte) 0); // Fitting
+                this.Write((byte) rp.Character.Type); // Type
+                this.Write((byte) 0);
+                this.Write((byte) 0);
+
+                this.Write("");
+                this.Write((short) 0);
+
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write((byte) 0);
+
+                this.Write("");
+                this.Write((short)0);
+
+                this.Write(0);
+                this.Write((byte)0);
+                this.Write((short)0);
+                this.Write((short)0);
+                this.Write((short)0);
+                this.Write((short)0);
+                this.Write(0);
+
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write(0);
+                this.Write((short)0);
+            }
+        }
+    }
+
+    public class C2SRoomMapChangePacket : Packet
+    {
+        public C2SRoomMapChangePacket(Packet packet)
+            : base(packet)
+        {
+            this.Map = this.ReadByte();
+        }
+
+        public byte Map { get; set; }
+    }
+
+    public class S2CRoomMapChangeAnswerPacket : Packet
+    {
+        public S2CRoomMapChangeAnswerPacket(byte map)
+            : base(Networking.Packet.PacketId.S2CRoomMapChangeAnswer)
+        {
+            this.Write(map);
+        }
+    }
+
+    public class S2CRoomListAnswerPacket : Packet
+    {
+        public S2CRoomListAnswerPacket(List<Room> roomList)
+            : base(Networking.Packet.PacketId.S2CRoomListAnswer)
+        {
+            this.Write((short)roomList.Count);
+
+            for (int i = 0; i < roomList.Count; i++)
+            {
+                this.Write((short)i);
+                this.Write(roomList[i].Name);
+                this.Write((short)0);
+                this.Write(roomList[i].GameMode);
+                this.Write(roomList[i].BattleMode);
+                this.Write((byte)0); // Unknown
+                this.Write((byte)0); // Unknown
+                this.Write((byte)0); // Unknown
+                this.Write(0); // Unknown
+                this.Write((int)roomList[i].Ball);
+                this.Write(roomList[i].MaxPlayer);
+                this.Write(roomList[i].Private);
+                this.Write(roomList[i].Level);
+                this.Write(roomList[i].LevelRange);
+                this.Write((byte) 0); // Unknown
+                this.Write(roomList[i].Map);
+                this.Write((byte)0); // Unknown
+                this.Write((byte)0); // Unknown
+                this.Write((byte)roomList[i].CurrentPlayers.Count); // Unknown
+                this.Write((byte)0); // Unknown
+                this.Write((byte)0); // Unknown
+            }
+        }
+    }
+
+    public class C2SLobbyUserListRequestPacket : Packet
+    {
+        public C2SLobbyUserListRequestPacket(Packet packet)
+            : base(packet)
+        {
+            this.Page = this.ReadByte();
+        }
+
+        public byte Page { get; set; }
+    }
+
+    public class S2CLobbyUserListAnswerPacket : Packet
+    {
+        public S2CLobbyUserListAnswerPacket(List<Character> characterList)
+            : base(Networking.Packet.PacketId.S2CLobbyUserListAnswer)
+        {
+            this.Write((byte)characterList.Count);
+            for (int i = 0; i < characterList.Count; i++)
+            {
+                this.Write((short)i);
+                this.Write(characterList[i].Name);
+                this.Write((short)0);
+                this.Write(characterList[i].CharacterId);
+                this.Write(characterList[i].Type);
             }
         }
     }

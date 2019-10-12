@@ -16,7 +16,7 @@
 
         public GameServer(string ipAddress, int port, DatabaseContext databaseContext) : base(ipAddress, port, databaseContext)
         {
-            this._gameHandler = new GameHandler();
+            this._gameHandler = new GameHandler(databaseContext);
             this._packetHandler = new PacketHandler(this._gameHandler);
         }
 

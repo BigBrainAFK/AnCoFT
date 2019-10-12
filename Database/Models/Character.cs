@@ -42,6 +42,7 @@
         public int BattlesWon { get; set; }
 
         public List<ChallengeProgress> ChallengeProgress { get; set; }
+        public List<TutorialProgress> TutorialProgress { get; set; }
 
         public int CharacterId { get; set; }
 

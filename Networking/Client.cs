@@ -7,6 +7,7 @@
     using AnCoFT.Database.Models;
     using AnCoFT.Game.SinglePlay.Challenge;
     using AnCoFT.Networking.Packet;
+    using AnCoFT.Game.MatchPlay.Room;
 
     public class Client
     {
@@ -29,5 +30,7 @@
         public Character ActiveCharacter { get; set; }
 
         public ChallengeGame ActiveChallengeGame { get; set; }
+        public Room ActiveRoom { get; set; }
+        public bool InLobby { get; set; }
     }
 }

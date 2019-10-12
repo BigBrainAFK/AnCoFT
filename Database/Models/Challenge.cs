@@ -7,6 +7,7 @@
         public short ChallengeId { get; set; }
 
         public GameType GameType { get; set; }
+        public GameMode GameMode { get; set; }
 
         public byte Level { get; set; }
 
