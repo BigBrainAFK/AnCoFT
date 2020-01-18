@@ -11,7 +11,7 @@
 
     public class LoginServer : TcpServer
     {
-        private readonly PacketHandler _packetHandler = new PacketHandler();
+        private readonly PacketHandlerBase _packetHandlerBase = new PacketHandlerBase();
 
         public LoginServer(string ipAddress, int port, DatabaseContext databaseContext) : base(ipAddress, port, databaseContext)
         {
@@ -41,7 +41,7 @@
             PacketStream clientStream = client.PacketStream;
             byte[] clientBuffer = new byte[4096];
 
-            this._packetHandler.SendWelcomePacket(client);
+            this._packetHandlerBase.SendWelcomePacket(client);
 
             while ((!this.Stopped) && (clientStream.Read(clientBuffer, 0, 8) != 0))
             {
@@ -52,7 +52,7 @@
 
                 Packet packet = new Packet(clientBuffer);
                 Console.WriteLine($"RECV [{packet.PacketId:X4}] {BitConverter.ToString(packet.GetRawPacket(), 0, packet.DataLength + 8)}");
-                this._packetHandler.HandlePacket(client, packet);
+                this._packetHandlerBase.HandlePacket(client, packet);
             }
         }
     }

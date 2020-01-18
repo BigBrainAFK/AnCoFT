@@ -25,5 +25,6 @@
         public string Password { get; set; }
 
         public short Status { get; set; }
+        public Home Home { get; set; }
     }
 }

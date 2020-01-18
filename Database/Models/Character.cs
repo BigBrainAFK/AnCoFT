@@ -1,4 +1,6 @@
-﻿namespace AnCoFT.Database.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace AnCoFT.Database.Models
 {
     using System.Collections.Generic;
 
@@ -31,8 +33,10 @@
             this.Socks = 0;
             this.Racket = 0;
             this.NameChangeAllowed = false;
+            this.Exp = 0;
         }
-
+        public int MaxInventoryCount { get; set; }
+        public int Exp { get; set; }
         public bool AlreadyCreated { get; set; }
 
         public int Bag { get; set; }
@@ -87,5 +91,11 @@
         public byte Type { get; set; }
 
         public byte Willpower { get; set; }
+        public GuildMember GuildMember { get; set; }
+        public List<CharacterInventory> Inventory { get; set; }
+        public List<MessengerFriend> MessengerFriendList { get; set; }
+        public int AccountId { get; set; }
+        [ForeignKey("AccountId")]
+        public Account Account { get; set; }
     }
 }

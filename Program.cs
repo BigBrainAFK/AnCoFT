@@ -1,4 +1,8 @@
-﻿namespace AnCoFT
+﻿using AnCoFT.Networking.Server.Base;
+using Microsoft.EntityFrameworkCore;
+using UDP;
+
+namespace AnCoFT
 {
     using System;
     using System.Diagnostics;
@@ -20,6 +24,7 @@
 
             try
             {
+                databaseContext.Database.EnsureDeleted();
                 databaseContext.Database.EnsureCreated();
             }
             catch (Exception ex)
@@ -51,7 +56,7 @@
             GameServer gameServer;
             try
             {
-                gameServer = new GameServer("127.0.0.1", 5895, databaseContext);
+                gameServer = new GameServer("127.0.0.1", 5895, databaseContext, "GAME");
                 gameServer.Start();
             }
             catch (Exception ex)
@@ -63,11 +68,16 @@
             }
 
             Console.WriteLine("Successful!");
+
+            GameServer relayServer = new GameServer("127.0.0.1", 5896, databaseContext, "RELAY", gameServer._gameHandler);
+            relayServer.Start();
+
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
 
             loginServer.Stop();
             gameServer.Stop();
+            relayServer.Stop();
         }
     }
 }

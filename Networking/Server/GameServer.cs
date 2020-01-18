@@ -10,14 +10,21 @@
 
     public class GameServer : TcpServer
     {
-        private readonly PacketHandler _packetHandler;
+        private readonly PacketHandlerBase _packetHandlerBase;
 
-        private readonly GameHandler _gameHandler;
+        public readonly GameHandler _gameHandler;
 
-        public GameServer(string ipAddress, int port, DatabaseContext databaseContext) : base(ipAddress, port, databaseContext)
+        private readonly string _name;
+
+        public GameServer(string ipAddress, int port, DatabaseContext databaseContext, string name, GameHandler gameHandler = null) : base(ipAddress, port, databaseContext)
         {
-            this._gameHandler = new GameHandler(databaseContext);
-            this._packetHandler = new PacketHandler(this._gameHandler);
+            if (gameHandler == null)
+                this._gameHandler = new GameHandler(databaseContext);
+            else
+                this._gameHandler = gameHandler;
+
+            this._packetHandlerBase = new PacketHandlerBase(this._gameHandler);
+            this._name = name;
         }
 
         public override void ListenerThread()
@@ -46,7 +53,7 @@
             PacketStream clientStream = client.PacketStream;
             byte[] clientBuffer = new byte[4096];
 
-            this._packetHandler.SendWelcomePacket(client);
+            this._packetHandlerBase.SendWelcomePacket(client);
 
             while ((!this.Stopped) && (clientStream.Read(clientBuffer, 0, 8) != 0))
             {
@@ -56,8 +63,8 @@
                 }
 
                 Packet packet = new Packet(clientBuffer);
-                Console.WriteLine($"RECV [{packet.PacketId:X4}] {BitConverter.ToString(packet.GetRawPacket(), 0, packet.DataLength + 8)}");
-                this._packetHandler.HandlePacket(client, packet);
+                Console.WriteLine($"{this._name}-RECV [{packet.PacketId:X4}] {BitConverter.ToString(packet.GetRawPacket(), 0, packet.DataLength + 8)}");
+                this._packetHandlerBase.HandlePacket(client, packet);
             }
         }
     }

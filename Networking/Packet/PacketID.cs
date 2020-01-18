@@ -32,6 +32,13 @@
         public const ushort S2CRoomPlayerInformation = 0x1394;
         public const ushort C2SRoomListReq = 0x13EC;
 
+        public const ushort C2SHomeData = 0x1518;
+        public const ushort S2CHomeData = 0x1519;
+
+        public const ushort C2SWhisper = 0x1702;
+        public const ushort S2CWhisperAnswer = 0x1703;
+        public const ushort C2SLobbyChat = 0x1705;
+        public const ushort S2CLobbyChatAnswer = 0x1706;
         public const ushort C2SLobbyUserListRequest = 0x1707;
         public const ushort S2CLobbyUserListAnswer = 0x1708;
 
@@ -45,18 +52,80 @@
         public const ushort S2CRoomMapChangeAnswer = 0x1789;
 
         public const ushort S2CUnknownRoomJoin = 0x189D;
-
-        public const ushort C2SShopApReq = 0x1B60;
-
+        
+        public const ushort C2SCharacterMoneyRequest = 0x1B60;
+        public const ushort S2CCharacterMoneyAnswer = 0x1B61;
+        public const ushort C2SInventoryWearClothRequest = 0x1B63;
+        public const ushort S2CInventoryWearClothAnswer = 0x1B64;
+        public const ushort C2SShopBuyReq = 0x1B67;
+        public const ushort S2CShopBuyAnswer = 0x1B68;
+        public const ushort S2CInventoryData = 0x1B69;
         public const ushort C2SCharacterDelete = 0x1B6B;
         public const ushort S2CCharacterDelete = 0x1B6C;
+        public const ushort C2SCharacterChangeStatsRequest = 0x1B6D;
+        public const ushort S2CCharacterChangeStatsAnswer = 0x1B6E;
+        public const ushort S2CCharacterStatsData = 0x1B6F;
+        public const ushort C2SInventoryWearQuickRequest = 0x1BD8;
+        public const ushort S2CInventoryWearQuickAnswer = 0x1BD9;
+
+        public const ushort C2SInventorySellReq = 0x1D06;
+        public const ushort S2CInventorySellAnswer = 0x1D07;
+        public const ushort C2SInventorySellItemCheckReq = 0x1D08;
+        public const ushort S2CInventorySellItemCheckAnswer = 0x1D09;
+        public const ushort S2CInventorySellItemAnswer = 0x1D0A;
+
+        // Messenger
+        public const ushort C2SMessengerFriendAddRequest = 0x1F41;
+        public const ushort S2CMessengerFriendAddAnswer = 0x1F42;
+        public const ushort C2SMessengerFriendDataRequest = 0x1F49;
+        public const ushort S2CMessengerFriendDataAnswer = 0x1F4A;
+        public const ushort C2SMessengerFriendDeleteRequest = 0x1F55;
+        public const ushort C2SMessengerMessageSendRequest = 0x1F5F;
+        public const ushort S2CMessengerMessageSendAnswer = 0x1F60; // ?
+        public const ushort C2SMessengerMessageDeleteRequest = 0x1F62;
+        public const ushort C2SMessengerMessageDataRequest = 0x1F63;
+        public const ushort S2CMessengerMessageDataAnswer = 0x1F64;
+        public const ushort C2SMessengerMessageReadRequest = 0x1F67;
+        public const ushort S2CMessengerMessageReadAnswer = 0x1F68;
+        public const ushort C2SMessengerParcelDataRequest = 0x219C;
+        public const ushort S2CMessengerParcelDataAnswer = 0x219D;
+        public const ushort C2SMessengerProposalDataRequest = 0x2526;
+        public const ushort S2CMessengerProposalDataAnswer = 0x2527;
+
+        // Guild
+        public const ushort C2SGuildNameCheckRequest = 0x2009;
+        public const ushort S2CGuildNameCheckAnswer = 0x200A;
+        public const ushort C2SGuildCreateRequest = 0x200B;
+        public const ushort S2CGuildCreateAnswer = 0x200C;
+        public const ushort C2SGuildDataRequest = 0x200D;
+        public const ushort S2CGuildDataAnswer = 0x200E;
+        public const ushort C2SGuildListRequest = 0x200F;
+        public const ushort S2CGuildListAnswer = 0x2010;
+        public const ushort C2SGuildChangeInformationRequest = 0x2017;
+        public const ushort C2SGuildReserveMemberDataRequest = 0x2018;
+        public const ushort S2CGuildReserveMemberDataAnswer = 0x2019;
+        public const ushort C2SGuildMemberDataRequest = 0x201A;
+        public const ushort S2CGuildMemberDataAnswer = 0x201B;
+        public const ushort C2SGuildChangeMasterRequest = 0x201F;
+        public const ushort S2CGuildChangeMasterAnswer = 0x2020;
+        public const ushort C2SGuildChangeSubMasterRequest = 0x2021;
+        public const ushort S2CGuildChangeSubMasterAnswer = 0x2022;
+        public const ushort C2SGuildDismissMemberRequest = 0x2023;
+        public const ushort S2CGuildDismissMemberAnswer = 0x2024;
+        public const ushort C2SGuildDeleteRequest = 0x2026;
+        public const ushort S2CGuildDeleteAnswer = 0x2027;
+        public const ushort C2SGuildGoldDataRequest = 0x202C;
+        public const ushort S2CGuildGoldDataAnswer = 0x202D;
+        public const ushort C2SGuildChangeNoticeRequest = 0x202E;
+        public const ushort C2SGuildSearchRequest = 0x203A;
+        public const ushort S2CGuildSearchAnswer = 0x203B;
+        public const ushort C2SGuildChangeReverseMemberRequest = 0x203F;
+        public const ushort S2CGuildChangeReverseMemberAnswer = 0x2040;
 
         public const ushort C2SChallengeProgressReq = 0x2206;
         public const ushort S2CChallengeProgressAck = 0x2207;
-
         public const ushort C2SChallengeBeginReq = 0x2208;
         public const ushort C2SChallengeHp = 0x2209;
-
         public const ushort C2SChallengePoint = 0x220A;
         public const ushort C2SChallengeSet = 0x220B;
         public const ushort S2CChallengeEnd = 0x220C;
@@ -67,10 +136,26 @@
         public const ushort S2CTutorialProgressAck = 0x2210;
         public const ushort C2SChallengeDamage = 0x2211;
 
-        public const ushort C2SEmblemListRequest = 0x226A;
-        public const ushort S2CEmblemListAnswer = 0x226B;
+        public const ushort C2SQuestListRequest = 0x226A;
+        public const ushort S2CQuestListAnswer = 0x226B;
+        public const ushort C2SQuestAcceptRequest = 0x2274;
+
+        public const ushort S2CCharacterLevelExpData = 0x22B8;
 
         public const ushort C2SLobbyJoin = 0x237A;
         public const ushort C2SLobbyLeave = 0x2379;
+
+        public const ushort C2SShopRequestDataPrepare = 0x2389;
+        public const ushort S2CShopAnswerDataPrepare = 0x238A;
+        public const ushort C2SShopRequestData = 0x2387;
+        public const ushort S2CShopAnswerData = 0x2388;
+
+        public const ushort C2SHomeItemsLoadReq = 0x254E;
+        public const ushort S2CHomeItemsLoadAnswer = 0x254F;
+        public const ushort C2SHomeItemsClearReq = 0x2552;
+        public const ushort C2SHomeItemsPlaceReq = 0x2550;
+
+        public const ushort C2SLeagueRankingRequest = 0x26F2;
+        public const ushort S2CGuildLeagueRankingAnswer = 0x26F3;
     }
 }

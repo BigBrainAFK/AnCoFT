@@ -13,6 +13,7 @@
     {
         public Client(TcpClient tcpClient, DatabaseContext databaseContextbCtx)
         {
+            tcpClient.NoDelay = true;
             this.TcpClient = tcpClient;
             this.DatabaseContext = databaseContextbCtx;
 
