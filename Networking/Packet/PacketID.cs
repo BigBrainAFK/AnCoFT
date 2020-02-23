@@ -1,4 +1,4 @@
-﻿namespace AnCoFT.Networking.Packet
+namespace AnCoFT.Networking.Packet
 {
     public static class PacketId
     {
@@ -101,6 +101,10 @@
         public const ushort S2CGuildDataAnswer = 0x200E;
         public const ushort C2SGuildListRequest = 0x200F;
         public const ushort S2CGuildListAnswer = 0x2010;
+        public const ushort C2SGuildJoinRequest = 0x2011;
+        public const ushort S2CGuildJoinAnswer = 0x2012;
+        public const ushort C2SGuildLeaveRequest = 0x2014;
+        public const ushort S2CGuildLeaveAnswer = 0x2015; // ?
         public const ushort C2SGuildChangeInformationRequest = 0x2017;
         public const ushort C2SGuildReserveMemberDataRequest = 0x2018;
         public const ushort S2CGuildReserveMemberDataAnswer = 0x2019;
@@ -112,15 +116,22 @@
         public const ushort S2CGuildChangeSubMasterAnswer = 0x2022;
         public const ushort C2SGuildDismissMemberRequest = 0x2023;
         public const ushort S2CGuildDismissMemberAnswer = 0x2024;
+        public const ushort S2CGuildDismissInfo = 0x2025; // ?
         public const ushort C2SGuildDeleteRequest = 0x2026;
         public const ushort S2CGuildDeleteAnswer = 0x2027;
+        public const ushort C2SGuildGoldWithdrawalRequest = 0x2029; // ?
+        public const ushort S2CGuildGoldWithdrawalAnswer = 0x202A; // ?
         public const ushort C2SGuildGoldDataRequest = 0x202C;
         public const ushort S2CGuildGoldDataAnswer = 0x202D;
         public const ushort C2SGuildChangeNoticeRequest = 0x202E;
+        public const ushort S2CGuildChangeNoticeAnswer = 0x202F;
+        public const ushort C2SGuildChatRequest = 0x2030;
+        public const ushort S2CGuildChatAnswer = 0x2031;
         public const ushort C2SGuildSearchRequest = 0x203A;
         public const ushort S2CGuildSearchAnswer = 0x203B;
         public const ushort C2SGuildChangeReverseMemberRequest = 0x203F;
         public const ushort S2CGuildChangeReverseMemberAnswer = 0x2040;
+        public const ushort S2CGuildCastleChangeInfoAnswer = 0x2047;
 
         public const ushort C2SChallengeProgressReq = 0x2206;
         public const ushort S2CChallengeProgressAck = 0x2207;

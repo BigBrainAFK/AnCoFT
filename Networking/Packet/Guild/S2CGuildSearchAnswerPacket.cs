@@ -4,10 +4,10 @@
     using System.Linq;
     using AnCoFT.Game.Guild;
 
-    public class S2CGuildListAnswerPacket : Packet
+    public class S2CGuildSearchAnswerPacket : Packet
     {
-        public S2CGuildListAnswerPacket(List<Database.Models.Guild> guildList)
-            : base(Networking.Packet.PacketId.S2CGuildListAnswer)
+        public S2CGuildSearchAnswerPacket(List<Database.Models.Guild> guildList)
+            : base(Networking.Packet.PacketId.S2CGuildSearchAnswer)
         {
             this.Write((byte)guildList.Count);
             for (int i = 0; i < guildList.Count; i++)
@@ -32,7 +32,6 @@
                 this.Write(guildList[i].LeagueRecordLoose);
                 this.Write(guildList[i].Introduction);
                 this.Write(guildList[i].CreationDay);
-                this.Write((byte)0); // Unknown
                 this.Write((byte)guildList[i].AllowedCharacterType.Length);
                 foreach (byte allowedCharacter in guildList[i].AllowedCharacterType)
                     this.Write(allowedCharacter);

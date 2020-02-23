@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AnCoFT.Networking.Packet.Guild
+﻿namespace AnCoFT.Networking.Packet.Guild
 {
+    using System;
+    using System.Collections.Generic;
+
     public class C2SGuildCreationRequestPacket : Packet
     {
         public C2SGuildCreationRequestPacket(Packet packet)
@@ -13,7 +12,7 @@ namespace AnCoFT.Networking.Packet.Guild
             this.Description = packet.ReadUnicodeString();
             this.Public = Convert.ToBoolean(packet.ReadByte());
             this.MinLevel = packet.ReadByte();
-            this.AllowedCharacterTypeCount = packet.ReadShort();
+            this.AllowedCharacterTypeCount = packet.ReadByte();
             this.AllowCharacterType = new List<byte>();
 
             for (int i = 0; i < this.AllowedCharacterTypeCount; i++)
@@ -21,10 +20,15 @@ namespace AnCoFT.Networking.Packet.Guild
         }
 
         public string Name { get; }
+
         public string Description { get; }
+
         public bool Public { get; }
+
         public byte MinLevel { get; }
-        public short AllowedCharacterTypeCount { get; }
+
+        public byte AllowedCharacterTypeCount { get; }
+
         public List<byte> AllowCharacterType { get; }
     }
 }

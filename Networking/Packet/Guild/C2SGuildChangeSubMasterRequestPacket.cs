@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AnCoFT.Networking.Packet.Guild
+﻿namespace AnCoFT.Networking.Packet.Guild
 {
+    using AnCoFT.Game.Guild;
+
     public class C2SGuildChangeSubMasterRequestPacket : Packet
     {
         public C2SGuildChangeSubMasterRequestPacket(Packet packet)
             : base(packet)
         {
-            this.Status = this.ReadByte();
+            this.Status = (GuildMemberStatus)this.ReadByte();
             this.CharacterId = this.ReadInteger();
         }
 
-        public byte Status { get; set; }
+        public GuildMemberStatus Status { get; set; }
+
         public int CharacterId { get; set; }
     }
 }

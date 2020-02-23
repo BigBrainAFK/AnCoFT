@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AnCoFT.Database.Models;
-
-namespace AnCoFT.Networking.Packet.Guild
+﻿namespace AnCoFT.Networking.Packet.Guild
 {
+    using AnCoFT.Database.Models;
+
     public class S2CGuildGoldDataPacket : Packet
     {
-        public S2CGuildGoldDataPacket(Database.Models.Guild guild)
+        public S2CGuildGoldDataPacket(Guild guild)
             : base(Networking.Packet.PacketId.S2CGuildGoldDataAnswer)
         {
             this.Write((short)0);
 
             if (guild.GoldUsages?.Count == null || guild.GoldUsages?.Count == 0)
             {
-                this.Write((byte) 0);
+                this.Write((byte)0);
                 return;
             }
 

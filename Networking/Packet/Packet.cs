@@ -1,13 +1,7 @@
-﻿using AnCoFT.Game.MatchPlay.Room;
-
-namespace AnCoFT.Networking.Packet
+﻿namespace AnCoFT.Networking.Packet
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
-
-    using Database.Models;
-    using Game.Item;
 
     public class Packet
     {
@@ -71,6 +65,7 @@ namespace AnCoFT.Networking.Packet
                     return i - pattern.Length + 1;
                 }
             }
+
             return -1;
         }
 
@@ -117,12 +112,29 @@ namespace AnCoFT.Networking.Packet
                     this.DataLength += 4;
                     break;
 
+                case TypeCode.Int64:
+                    dataElement = BitConverter.GetBytes(Convert.ToInt64(element));
+                    Buffer.BlockCopy(dataElement, 0, this.Data, this.DataLength, 8);
+                    this.DataLength += 8;
+                    break;
+                case TypeCode.UInt64:
+                    dataElement = BitConverter.GetBytes(Convert.ToUInt64(element));
+                    Buffer.BlockCopy(dataElement, 0, this.Data, this.DataLength, 8);
+                    this.DataLength += 8;
+                    break;
+
+                case TypeCode.DateTime:
+                    dataElement = BitConverter.GetBytes(Convert.ToDateTime(element).ToFileTime());
+                    Buffer.BlockCopy(dataElement, 0, this.Data, this.DataLength, 8);
+                    this.DataLength += 8;
+                    break;
+
                 case TypeCode.String:
                     dataElement = Encoding.Unicode.GetBytes(Convert.ToString(element));
                     Buffer.BlockCopy(dataElement, 0, this.Data, this.DataLength, dataElement.Length);
                     this.DataLength += Convert.ToUInt16(dataElement.Length);
 
-                    Buffer.BlockCopy(new byte[] {0, 0}, 0, this.Data, this.DataLength, 2);
+                    Buffer.BlockCopy(new byte[] { 0, 0 }, 0, this.Data, this.DataLength, 2);
                     this.DataLength += 2;
                     break;
 
@@ -157,6 +169,13 @@ namespace AnCoFT.Networking.Packet
             return result;
         }
 
+        public bool ReadBoolean()
+        {
+            byte result = this.Data[this._readPosition];
+            this._readPosition += 1;
+            return Convert.ToBoolean(result);
+        }
+
         public void ReadByte(out byte element)
         {
             element = this.Data[this._readPosition];
@@ -174,10 +193,15 @@ namespace AnCoFT.Networking.Packet
         {
             string result = string.Empty;
             int stringLength = IndexOf(this.Data, new byte[] { 0x00, 0x00 }, this._readPosition) + 1 - this._readPosition;
-            if (stringLength > 0)
+            if (stringLength > 1)
             {
                 result = Encoding.Unicode.GetString(this.Data, this._readPosition, stringLength);
                 this._readPosition += stringLength + 2;
+            }
+            else
+            {
+                result = string.Empty;
+                this._readPosition += 2;
             }
 
             return result;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AnCoFT.Networking.Packet.Guild
+﻿namespace AnCoFT.Networking.Packet.Guild
 {
     public class C2SGuildChangeNoticeRequestPacket : Packet
     {

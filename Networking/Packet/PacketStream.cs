@@ -1,12 +1,12 @@
 ﻿namespace AnCoFT.Networking.Packet
 {
     using System;
-    using System.IO;
     using System.Net.Sockets;
 
     public class PacketStream
     {
-        public static readonly byte[] SerialTable = {
+        public static readonly byte[] SerialTable =
+        {
                                                             0xF2, 0x30, 0x75, 0x86, 0xD4, 0x7D, 0x57, 0x38, 0x6E, 0x68,
                                                             0x4F, 0x7E, 0x30, 0x58, 0xED, 0x7D, 0x5C, 0x47, 0xC3, 0x31,
                                                             0xCA, 0x2B, 0x5F, 0x56, 0xC8, 0x7A, 0x65, 0x34, 0xF6, 0x62,
@@ -67,7 +67,7 @@
                                                             0x25, 0x5D, 0x96, 0x38, 0x67, 0x40, 0x8E, 0x60, 0x19, 0x31,
                                                             0x1B, 0x30, 0xC9, 0x2D, 0x76, 0x45, 0x15, 0x7A, 0x2E, 0x62,
                                                             0x61, 0x53, 0xAA, 0x56, 0x9B, 0x84, 0x3C, 0x67, 0xCD, 0x63,
-                                                            0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                                                            0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                                         };
 
         private readonly NetworkStream _baseStream;
@@ -109,7 +109,7 @@
             data[1] = BitConverter.GetBytes(header)[1];
 
             this._indicator += 1;
-            this._indicator = this._indicator % 60;
+            this._indicator %= 60;
 
             return header;
         }
@@ -119,7 +119,7 @@
             short v2 = Convert.ToInt16(data[0] + data[1] + data[4] + data[5] + data[6] + data[7]);
             long tempV2 = v2 & 0x80000001;
             bool v1 = tempV2 == 0;
-            short result;  
+            short result;
 
             if (tempV2 < 0)
             {
