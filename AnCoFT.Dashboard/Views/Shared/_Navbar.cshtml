@@ -1,0 +1,98 @@
+@using AnCoFT.Database.Models;
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+
+<div class="hero-head">
+	<nav class="navbar @("is-" + colorMode)" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="~/">
+				<img src="~/image/logo.png" width="112" height="28">
+			</a>
+
+			<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
+		</div>
+		<div id="mainNavbar" class="navbar-menu">
+			<div class="navbar-start">
+				<a class="navbar-item" asp-area="" asp-controller="Home" asp-action="Index">
+					Home
+				</a>
+
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a class="navbar-link" asp-area="" asp-controller="Dashboard" asp-action="Index">
+						Dashboard
+					</a>
+
+					<div class="navbar-dropdown has-background-@(colorMode)">
+						@if (User.Identity.IsAuthenticated)
+						{
+							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters">
+								Characters
+							</a>
+
+							@if (AccountService.GetAuthLevel(User) >= AuthLevel.Support)
+							{
+								<hr class="navbar-divider">
+								<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Accounts">
+									Accounts
+								</a>
+							}
+							<hr class="navbar-divider">
+							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="ResetLogin">
+								Login Reset
+							</a>
+							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="EditAccount">
+								Edit Account
+							</a>
+							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="ChangePassword">
+								Change Password
+							</a>
+							<hr class="navbar-divider">
+						}
+						<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)">
+							Report an issue
+						</a>
+					</div>
+				</div>
+
+				<a class="navbar-item" asp-area="" asp-controller="Home" asp-action="Privacy">
+					Privacy
+				</a>
+			</div>
+
+			@if (User.Identity.IsAuthenticated)
+			{
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+							<a class="button @("is-" + colorMode)" asp-area="" asp-controller="Home" asp-action="Logout">
+								Log out
+							</a>
+						</div>
+					</div>
+				</div>
+			}
+			else
+			{
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+							<a class="button is-primary" asp-area="" asp-controller="Home" asp-action="Register">
+								<strong>Sign up</strong>
+							</a>
+							<a class="button @("is-" + colorMode)" asp-area="" asp-controller="Home" asp-action="Login">
+								Log in
+							</a>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</nav>
+</div>

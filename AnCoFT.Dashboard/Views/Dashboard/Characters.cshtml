@@ -1,0 +1,159 @@
+@model AnCoFT.Dashboard.Models.CharactersModel
+@using AnCoFT.Database.Models;
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+@{
+	ViewData["Title"] = "Dashboard - Characters";
+}
+
+<div class="container">
+	<form asp-area="" asp-controller="Dashboard" asp-action="Characters" method="get">
+		<div class="field has-addons">
+			<div class="control is-expanded">
+				<input class="input has-background-@(colorMode) has-text-@(textColor)" type="text" name="SearchString" placeholder="Charactername to search for" value="@Model.CurrentFilter" />
+			</div>
+			<div class="control">
+				<input class="button is-info" type="submit" value="Search" />
+			</div>
+			<div class="control">
+				<a class="button is-info" type="submit" asp-area="" asp-controller="Dashboard" asp-action="Characters">
+					<span class='icon'>
+						<i class='fas fa-redo'></i>
+					</span>
+				</a>
+			</div>
+		</div>
+	</form>
+	<br />
+	<table class="table is-narrow is-left is-fullwidth @("has-background-" + colorMode + " has-text-" + textColor)">
+		<thead>
+			<tr>
+				<th>
+					<a class="has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters" asp-route-sortOrder="@Model.CharacterIdSort"
+					   asp-route-currentFilter="@Model.CurrentFilter">
+						@Html.DisplayNameFor(model => model.Characters[0].CharacterId)
+					</a>
+				</th>
+				<th>
+					<a class="has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters" asp-route-sortOrder="@Model.GoldSort"
+					   asp-route-currentFilter="@Model.CurrentFilter">
+						@Html.DisplayNameFor(model => model.Characters[0].Gold)
+					</a>
+				</th>
+				<th>
+					<a class="has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters" asp-route-sortOrder="@Model.NameSort"
+					   asp-route-currentFilter="@Model.CurrentFilter">
+						@Html.DisplayNameFor(model => model.Characters[0].Name)
+					</a>
+				</th>
+				<th>
+					<a class="has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters" asp-route-sortOrder="@Model.LevelSort"
+					   asp-route-currentFilter="@Model.CurrentFilter">
+						@Html.DisplayNameFor(model => model.Characters[0].Level)
+					</a>
+				</th>
+				<th>
+					<a class="has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters" asp-route-sortOrder="@Model.TypeSort"
+					   asp-route-currentFilter="@Model.CurrentFilter">
+						@Html.DisplayNameFor(model => model.Characters[0].Type)
+					</a>
+				</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Character character in Model.Characters)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => character.CharacterId)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => character.Gold)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => character.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => character.Level)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => character.Type)
+					</td>
+					<td>
+						<a class='button is-small is-info is-outlined' title='Show' asp-area="" asp-controller="Dashboard" asp-action="ShowCharacter" asp-route-id="@(character.CharacterId)">
+							<span class='icon'>
+								<i class='far fa-eye has-text-@(textColor)'></i>
+							</span>
+						</a>
+					</td>
+					<td>
+						<a class='button is-small is-info is-outlined' title='Edit' asp-area="" asp-controller="Dashboard" asp-action="EditCharacter" asp-route-id="@(character.CharacterId)">
+							<span class='icon'>
+								<i class='fas fa-cog has-text-@(textColor)'></i>
+							</span>
+						</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<br />
+	@{
+		var prevDisabled = !Model.Characters.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.Characters.HasNextPage ? "disabled" : "";
+	}
+	<nav class="pagination is-centered">
+		<a asp-area="" asp-controller="Dashboard" asp-action="Characters"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Characters.PageIndex - 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="pagination-previous @("has-text-" + textColor + " " + prevDisabled)">
+			Previous
+		</a>
+		<a asp-area="" asp-controller="Dashboard" asp-action="Characters"
+		   asp-route-sortOrder="@Model.CurrentSort"
+		   asp-route-pageIndex="@(Model.Characters.PageIndex + 1)"
+		   asp-route-currentFilter="@Model.CurrentFilter"
+		   class="pagination-next @("has-text-" + textColor + " " + nextDisabled)">
+			Next
+		</a>
+		<ul class="pagination-list">
+			@{
+				bool dotted = false;
+				for (int i = 1; i <= Model.Characters.TotalPages; i++)
+				{
+					<li>
+						@if (Model.Characters.PageIndex == i)
+						{
+							<a class="pagination-link is-current @("has-text-" + textColor)">@(i)</a>
+						}
+						else
+						{
+							int distance = Math.Abs(Model.Characters.PageIndex - i);
+
+							if (i == 1 || i == Model.Characters.TotalPages || distance < 2)
+							{
+								<a class="pagination-link @("has-text-" + textColor)" asp-area="" asp-controller="Dashboard" asp-action="Characters"
+								   asp-route-sortOrder="@Model.CurrentSort"
+								   asp-route-pageIndex="@(i)"
+								   asp-route-currentFilter="@Model.CurrentFilter">@(i)</a>
+							}
+							else if (!dotted)
+							{
+
+								dotted = true;
+								<a class="pagination-ellipsis @("has-text-" + textColor)">&hellip;</a>
+							}
+						}
+					</li>
+				}
+			}
+		</ul>
+	</nav>
+</div>

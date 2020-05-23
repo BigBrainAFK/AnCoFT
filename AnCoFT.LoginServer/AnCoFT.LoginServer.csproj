@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>netcoreapp3.1</TargetFramework>
+	<StartupObject>AnCoFT.LoginServerProgramm</StartupObject>
+	<RootNamespace>AnCoFT</RootNamespace>
+	<OutputPath>..\build\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AnCoFT.Common\AnCoFT.Common.csproj" />
+  </ItemGroup>
+
+</Project>

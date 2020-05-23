@@ -1,0 +1,151 @@
+@model AnCoFT.Dashboard.Models.RegisterModel
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+@{
+	ViewData["Title"] = "Registration";
+}
+
+<div class="container is-fluid">
+	<div class="columns">
+		<div class="column is-hidden-mobile"></div>
+		<div class="column">
+			<h2 class="subtitle @("has-text-" + textColor)">
+				Register
+			</h2>
+			@Html.AntiForgeryToken()
+			@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "is-fullwidth" }))
+			{
+				<div class="field">
+					@Html.LabelFor(a => a.Username, null, new { @class = "label", @style = "display: none;" })
+					<div class="control has-icons-left has-icons-right">
+						@Html.TextBoxFor(a => a.Username, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Username" })
+						<span class="icon is-small is-left">
+							<i class="fas fa-user"></i>
+						</span>
+						@if (Html.ValidationMessageFor(a => a.Username) == null) //always false even if the validation message at the bottom is not displayed
+						{
+							<span class="icon is-small is-right">
+								<i class="fas fa-check"></i>
+							</span>
+						}
+						else
+						{
+							<span class="icon is-small is-right">
+								<i class="fas fa-exclamation-triangle"></i>
+							</span>
+						}
+					</div>
+					<p>@Html.ValidationMessageFor(a => a.Username, "", new { @class = "help is-danger" })</p>
+				</div>
+				<div class="field is-horizontal">
+					<div class="field-body">
+						<div class="field">
+							@Html.LabelFor(a => a.EMail, null, new { @class = "label", @style = "display: none;" })
+							<div class="control has-icons-left has-icons-right">
+								@Html.TextBoxFor(a => a.EMail, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "E-Mail Address" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-envelope"></i>
+								</span>
+								@if (Html.ValidationMessageFor(a => a.EMail).Equals(null))
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-check"></i>
+									</span>
+								}
+								else
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-exclamation-triangle"></i>
+									</span>
+								}
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.EMail, "", new { @class = "help is-danger" })</p>
+						</div>
+						<div class="field">
+							@Html.LabelFor(a => a.ConfirmEMail, null, new { @class = "label", @style = "display: none;" })
+							<div class="control has-icons-left has-icons-right">
+								@Html.TextBoxFor(a => a.ConfirmEMail, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Confirm E-Mail Address" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-envelope"></i>
+								</span>
+								@if (Html.ValidationMessageFor(a => a.ConfirmEMail) == null)
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-check"></i>
+									</span>
+								}
+								else
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-exclamation-triangle"></i>
+									</span>
+								}
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.ConfirmEMail, "", new { @class = "help is-danger" })</p>
+						</div>
+					</div>
+				</div>
+				<div class="field is-horizontal">
+					<div class="field-body">
+
+						<div class="field">
+							@Html.LabelFor(a => a.Password, null, new { @class = "label", @style = "display: none;" })
+							<div class="control has-icons-left has-icons-right">
+								@Html.PasswordFor(a => a.Password, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Password" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-key"></i>
+								</span>
+								@if (Html.ValidationMessageFor(a => a.Password) == null)
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-check"></i>
+									</span>
+								}
+								else
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-exclamation-triangle"></i>
+									</span>
+								}
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.Password, "", new { @class = "help is-danger" })</p>
+						</div>
+						<div class="field">
+							@Html.LabelFor(a => a.ConfirmPassword, null, new { @class = "label", @style = "display: none;" })
+							<div class="control has-icons-left has-icons-right">
+								@Html.PasswordFor(a => a.ConfirmPassword, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Confirm password" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-key"></i>
+								</span>
+								@if (Html.ValidationMessageFor(a => a.ConfirmPassword) == null)
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-check"></i>
+									</span>
+								}
+								else
+								{
+									<span class="icon is-small is-right">
+										<i class="fas fa-exclamation-triangle"></i>
+									</span>
+								}
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.ConfirmPassword, "", new { @class = "help is-danger" })</p>
+						</div>
+					</div>
+				</div>
+
+				<p class="help is-danger">@ViewData["message"]</p>
+
+				<p class="control">
+					<input type="submit" value="Sign-up" class="button is-link" />
+				</p>
+			}
+		</div>
+		<div class="column is-hidden-mobile"></div>
+		<div class="column is-hidden-mobile"></div>
+	</div>
+</div>

@@ -1,0 +1,70 @@
+@using AnCoFT.Database.Models;
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+
+	string action = ViewContext.RouteData.Values["Action"].ToString();
+	string controller = ViewContext.RouteData.Values["Controller"].ToString();
+	string idParam = ViewContext.RouteData.Values["Id"] != null ? ViewContext.RouteData.Values["Id"].ToString() : "";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - AnCoFT</title>
+
+	@await Html.PartialAsync("~/Views/Shared/_Header.cshtml")
+
+	@await Html.PartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml")
+</head>
+<body class="@("has-background-" + colorMode)">
+	<div class="hero is-fullheight">
+		@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+		<div class="hero-body">
+			<div class="container is-fluid">
+				<h1 class="title is-size-2 has-text-weight-light @("has-text-" + textColor)">
+					Dashboard
+				</h1>
+				<hr>
+				<div class="columns">
+					<div class="column is-3 is-size-5 has-text-weight-light">
+						<div class="menu">
+							<p class="menu-label has-text-@(textColor)">General</p>
+							<ul class="menu-list">
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Home" asp-action="Index">Hompeage</a></li>
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((controller == "Dashboard" && action == "" ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+							</ul>
+							<p class="menu-label has-text-@(textColor)">Account</p>
+							<ul class="menu-list">
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "Characters" ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="Characters">Characters</a></li>
+								</ul>
+							@if (AccountService.GetAuthLevel(User) >= AuthLevel.Support)
+							{
+								<div id='userManagement'>
+									<p class="menu-label has-text-@(textColor)">Users</p>
+									<ul class="menu-list">
+										<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "Accounts" ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="Accounts">List Users</a></li>
+									</ul>
+								</div>
+							}
+							<p class="menu-label has-text-@(textColor)">Settings</p>
+							<ul class="menu-list">
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "ResetLogin" ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="ResetLogin">Login Reset</a></li>
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "EditAccount" && int.Parse(idParam) == AccountService.GetUserId(User) ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="EditAccount">Edit account</a></li>
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "Changepassword" ? " is-active" : ""))" asp-area="" asp-controller="Dashboard" asp-action="ChangePassword">Change password</a></li>
+								<li><a class="has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a></li>
+							</ul>
+						</div>
+					</div>
+					@RenderBody()
+				</div>
+			</div>
+		</div>
+
+		@await Html.PartialAsync("~/Views/Shared/_Footer.cshtml")
+	</div>
+</body>
+</html>

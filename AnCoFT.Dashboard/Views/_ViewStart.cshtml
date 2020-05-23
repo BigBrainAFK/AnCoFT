@@ -1,0 +1,10 @@
+@{
+	var controller = ViewContext.RouteData.Values["Controller"].ToString();
+	string cLayout = "~/Views/Shared/_Layout.cshtml";
+	if (controller == "Dashboard")
+	{
+		cLayout = "~/Views/Shared/_DashboardLayout.cshtml";
+	}
+	Console.WriteLine(cLayout);
+	Layout = cLayout;
+}

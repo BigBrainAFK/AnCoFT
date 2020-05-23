@@ -1,0 +1,29 @@
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - AnCoFT</title>
+
+	@await Html.PartialAsync("~/Views/Shared/_Header.cshtml")
+
+	@await Html.PartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml")
+</head>
+<body class="@("has-background-" + colorMode + " has-text-" + textColor)">
+	<div class="hero is-fullheight">
+		@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+		<div class="hero-body">
+			@RenderBody()
+		</div>
+
+		@await Html.PartialAsync("~/Views/Shared/_Footer.cshtml")
+		@RenderSection("Scripts", required: false)
+	</div>
+</body>
+</html>

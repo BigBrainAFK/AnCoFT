@@ -1,0 +1,54 @@
+@model AnCoFT.Dashboard.Models.AuthenticateModel
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+@{
+	ViewData["Title"] = "Login";
+}
+
+<style type="text/css">
+	.placeholder {
+		color: @(colorMode == "dark" ? "#cccccc !important" : "#dbdbdb !important");
+	}
+</style>
+
+<div class="container is-fluid">
+	<div class="columns">
+		<div class="column is-hidden-mobile"></div>
+		<div class="column">
+			<h2 class="subtitle @("has-text-" + textColor)">
+				Login
+			</h2>
+			@Html.AntiForgeryToken()
+			@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "is-fullwidth" }))
+			{
+				<div class="field">
+					<div class="control has-icons-left has-icons-right">
+						@Html.TextBoxFor(a => a.Username, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Username" })
+						<span class="icon is-small is-left">
+							<i class="fas fa-user"></i>
+						</span>
+					</div>
+				</div>
+				<div class="field">
+					<div class="control has-icons-left has-icons-right">
+						@Html.PasswordFor(a => a.Password, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Password" })
+						<span class="icon is-small is-left">
+							<i class="fas fa-key"></i>
+						</span>
+					</div>
+				</div>
+
+				<p class="help is-danger">@ViewData["message"]</p>
+
+				<p class="control">
+					<input type="submit" value="Login" class="button is-link" />
+				</p>
+			}
+		</div>
+		<div class="column is-hidden-mobile"></div>
+		<div class="column is-hidden-mobile"></div>
+	</div>
+</div>

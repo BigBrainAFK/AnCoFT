@@ -1,0 +1,47 @@
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
+<div class="hero-foot  @("is-" + colorMode)">
+	<nav class="navbar">
+		<div class="container has-text-centered">
+			<div class="navbar-item @("has-text-" + textColor)">
+				&copy; 2020 - BigBrainAFK - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+			</div>
+
+			@if (Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode")
+			{
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+							<div class="is-pulled-right">
+								<button class="button is-small is-rounded" onclick="location.href='@Url.Action("SetLight", "Home")'">
+									<span class="icon is-small">
+										<i class="fas fa-sun fa-2x"></i>
+									</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+			else
+			{
+				<div class="navbar-end">
+					<div class="navbar-item">
+						<div class="buttons">
+							<div class="is-pulled-right">
+								<button class="button is-small is-rounded" onclick="location.href='@Url.Action("SetDark", "Home")'">
+									<span class="icon is-small">
+										<i class="fas fa-moon fa-2x"></i>
+									</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</nav>
+</div>
