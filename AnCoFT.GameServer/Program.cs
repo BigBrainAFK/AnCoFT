@@ -28,7 +28,7 @@ namespace AnCoFT
 			DatabaseContext databaseContext  = new DatabaseContext(serverConfig.dbConfig);
             try
             {
-                databaseContext.Database.EnsureDeleted();
+                //databaseContext.Database.EnsureDeleted();
                 databaseContext.Database.EnsureCreated();
             }
             catch (Exception ex)

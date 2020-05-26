@@ -9,6 +9,15 @@ namespace AnCoFT.Dashboard.Helpers
 		public AutoMapperProfile()
 		{
 			CreateMap<RegisterModel, Account>();
+
+			CreateMap<Character, CharacterEdit>();
+			CreateMap<CharacterEdit, Character>();
+
+			CreateMap<Account, AccountEdit>();
+			CreateMap<Account, AccountEditUser>();
+			CreateMap<AccountEdit, Account>();
+			CreateMap<AccountEditUser, Account>();
+			CreateMap<AccountEdit, AccountEditUser>();
 		}
 	}
 }

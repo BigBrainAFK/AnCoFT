@@ -47,7 +47,7 @@
 							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="ResetLogin">
 								Login Reset
 							</a>
-							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="EditAccount">
+							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="EditAccount" asp-route-id="@AccountService.GetUserId(User)">
 								Edit Account
 							</a>
 							<a class="navbar-item has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Dashboard" asp-action="ChangePassword">

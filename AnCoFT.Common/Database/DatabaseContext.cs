@@ -138,23 +138,5 @@ namespace AnCoFT.Database
                 }
             });
         }
-
-		private string random_token(int length = 64, string keyspace = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-		{
-			if (length < 1)
-			{
-				throw new Exception("Token length has to be at least 1");
-			}
-
-			string new_token = "";
-			Random random = new Random();
-
-			for (int i = 0; i < length; i++)
-			{
-				new_token += keyspace[random.Next(0, keyspace.Length - 1)];
-			}
-
-			return new_token;
-		}
     }
 }

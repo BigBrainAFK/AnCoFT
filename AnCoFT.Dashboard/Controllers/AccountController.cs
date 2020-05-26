@@ -19,6 +19,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace AnCoFT.Dashboard.Controllers
@@ -30,17 +31,21 @@ namespace AnCoFT.Dashboard.Controllers
     {
 		private readonly IMapper _mapper;
 		private readonly IAccountService _accountService;
+		private readonly ICharacterService _characterService;
 		private readonly Configuration _servConfig;
+		private readonly DatabaseContext _dbContext;
 
-		public AccountController(IAccountService accountService, IMapper mapper)
+		public AccountController(IAccountService accountService, ICharacterService characterService, IMapper mapper, DatabaseContext dbContext)
 		{
 			_accountService = accountService;
+			_characterService = characterService;
 			_mapper = mapper;
 			_servConfig = Configuration.loadConfiguration();
+			_dbContext = dbContext;
 		}
 
 		[AllowAnonymous]
-		[HttpPost("login")]
+		[HttpPost("Login")]
 		[ValidateAntiForgeryToken]
 		public IActionResult Login([FromForm]AuthenticateModel model)
 		{
@@ -78,7 +83,7 @@ namespace AnCoFT.Dashboard.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPost("register")]
+		[HttpPost("Register")]
 		[ValidateAntiForgeryToken]
 		public IActionResult Register([FromForm]RegisterModel model)
 		{
@@ -105,7 +110,95 @@ namespace AnCoFT.Dashboard.Controllers
 			catch (AppException ex)
 			{
 				ViewData["message"] = ex.Message;
-				return View("~/Views/Home/Register.cshtml");
+				return View("~/Views/Home/Register.cshtml", model);
+			}
+		}
+
+		[Authorize]
+		[HttpPost("EditCharacter")]
+		[ValidateAntiForgeryToken]
+		public IActionResult EditCharacter([FromForm]CharacterEdit model)
+		{
+			if (!ModelState.IsValid)
+			{
+
+				Console.WriteLine("not valid");
+				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
+			}
+
+			byte[] hash = SHA3.Net.Sha3.Sha3512().ComputeHash(Encoding.UTF8.GetBytes(model.CharacterId.ToString() + _servConfig.secret));
+
+			if (!model.Hash.SequenceEqual(hash))
+			{
+				ViewBag.message = "CharacterId has been tempered.";
+				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
+			}
+
+			try
+			{
+				Character character = _characterService.GetById(model.CharacterId);
+
+				_mapper.Map(model, character);
+
+				_dbContext.Update(character);
+				_dbContext.SaveChanges();
+
+				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
+			}
+			catch (AppException ex)
+			{
+				ViewBag.message = ex.Message;
+				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
+			}
+		}
+
+		[Authorize]
+		[HttpPost("EditAccount")]
+		[ValidateAntiForgeryToken]
+		public IActionResult EditAccount([FromForm]AccountEdit model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+			}
+
+			byte[] hash = SHA3.Net.Sha3.Sha3512().ComputeHash(Encoding.UTF8.GetBytes(model.AccountId.ToString() + _servConfig.secret));
+
+			if (!model.Hash.SequenceEqual(hash))
+			{
+				ViewBag.message = "AccountId has been tempered.";
+				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+			}
+
+			try
+			{
+				Account account = _accountService.GetById(model.AccountId);
+
+				if (AccountService.GetAuthLevel(User) < AuthLevel.Admin)
+				{
+					AccountEditUser accountEditUser = _mapper.Map<AccountEditUser>(model);
+					_mapper.Map(accountEditUser, account);
+
+					if (account.Username != accountEditUser.Username)
+					{
+						ViewBag.message = "You can not edit your username.";
+						return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+					}
+				}
+				else
+				{
+					_mapper.Map(model, account);
+				}
+
+				_dbContext.Update(account);
+				_dbContext.SaveChanges();
+
+				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+			}
+			catch (AppException ex)
+			{
+				ViewBag.message = ex.Message;
+				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
 			}
 		}
 
@@ -115,8 +208,8 @@ namespace AnCoFT.Dashboard.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-		[HttpGet]
 		[Authorize(Policy = "Supporter")]
+		[HttpGet]
 		public IActionResult GetAll()
 		{
 			IEnumerable<Account> accounts = _accountService.GetAll();
@@ -124,29 +217,31 @@ namespace AnCoFT.Dashboard.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpGet("isuserunique")]
-		public IActionResult IsUserUnique(string Username)
+		[HttpGet("IsUserUnique")]
+		public IActionResult IsUserUnique(string Username, int? accountId)
 		{
-			return Json(_accountService.IsUserUnique(Username));
+			return Json(_accountService.IsUserUnique(Username, accountId));
 		}
 
 		[AllowAnonymous]
-		[HttpGet("isemailunique")]
-		public IActionResult IsEMailUnique(string EMail)
+		[HttpGet("IsEmailUnique")]
+		public IActionResult IsEMailUnique(string EMail, int? accountId)
 		{
-			return Json(_accountService.IsEMailUnique(EMail));
+			return Json(_accountService.IsEMailUnique(EMail, accountId));
 		}
 
 		public void BuildEmailTemplate(Account account)
 		{
-			string url = $"https://{_servConfig.url}/Confirm/{account.Token.ToString("D")}";
+			string url = $"https://{_servConfig.url}/Confirm/{account.Token:D}";
 			string text = string.Format("Please click on this link to confirm your account: {0}", url);
 			string html = $"Please confirm your account by clicking this link: <a href=\"{url}\">link</a><br/>";
 
 			html += HttpUtility.HtmlEncode($"Or click on the copy the following link on the browser:{url}");
 
-			MailMessage msg = new MailMessage();
-			msg.From = new MailAddress(_servConfig.EMail.EMail);
+			MailMessage msg = new MailMessage
+			{
+				From = new MailAddress(_servConfig.EMail.EMail)
+			};
 			msg.To.Add(new MailAddress(account.EMail));
 			msg.Subject = "Confirm your account";
 			msg.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
@@ -157,6 +252,34 @@ namespace AnCoFT.Dashboard.Controllers
 			smtpClient.Credentials = credentials;
 			smtpClient.EnableSsl = true;
 			smtpClient.Send(msg);
+		}
+
+		[Authorize]
+		[HttpGet("CharacterIdChanged")]
+		public IActionResult CharacterIdChanged(int characterId, byte[] hash)
+		{
+			return Json(hash.SequenceEqual(SHA3.Net.Sha3.Sha3512().ComputeHash(Encoding.UTF8.GetBytes(characterId.ToString() + _servConfig.secret))));
+		}
+
+		[Authorize]
+		[HttpGet("AccountIdChanged")]
+		public IActionResult AccountIdChanged(int accountId, byte[] hash)
+		{
+			return Json(hash.SequenceEqual(SHA3.Net.Sha3.Sha3512().ComputeHash(Encoding.UTF8.GetBytes(accountId.ToString() + _servConfig.secret))));
+		}
+
+		[Authorize]
+		[HttpGet("IsCharacterNameUnique")]
+		public IActionResult IsCharacterNameUnique(string name, int characterId)
+		{
+			return Json(_characterService.IsCharacterNameUnique(name, characterId));
+		}
+
+		[Authorize]
+		[HttpGet("IsAuthLevelValid")]
+		public IActionResult IsAuthLevelValid(int authLevel)
+		{
+			return Json(Enum.TryParse(typeof(AuthLevel), authLevel.ToString(), out _));
 		}
 	}
 }

@@ -56,11 +56,7 @@ namespace AnCoFT.Dashboard.Controllers
 		[HttpGet]
 		public IActionResult Confirm(string guid)
 		{
-			Guid tokenGuid;
-
-			bool converted = Guid.TryParse(guid, out tokenGuid);
-
-			Console.WriteLine(guid);
+			bool converted = Guid.TryParse(guid, out _);
 
 			if (!converted)
 			{

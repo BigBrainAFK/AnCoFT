@@ -16,8 +16,8 @@ namespace AnCoFT.Dashboard.Services
 		IEnumerable<Account> GetAll();
 		Account GetById(int id);
 		Account Create(Account account);
-		bool IsUserUnique(string Username);
-		bool IsEMailUnique(string EMail);
+		bool IsUserUnique(string Username, int? accountId);
+		bool IsEMailUnique(string EMail, int? accountId);
 	}
 
 	public class AccountService : IAccountService
@@ -80,7 +80,7 @@ namespace AnCoFT.Dashboard.Services
 
 		public Account Create(Account account)
 		{
-			if (DbContext.Account.Any(x => x.Username == account.Username))
+			if (DbContext.Account.Any(a => a.Username == account.Username))
 				return null;
 
 			DbContext.Account.Add(account);
@@ -108,14 +108,22 @@ namespace AnCoFT.Dashboard.Services
 			return int.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 		}
 
-		public bool IsUserUnique(string Username)
+		public bool IsUserUnique(string Username, int? accountId)
 		{
-			return !DbContext.Account.Any(x => x.Username == Username);
+			if (accountId != null)
+			{
+				return !DbContext.Account.Any(a => a.Username == Username && a.AccountId != accountId);
+			}
+			return !DbContext.Account.Any(a => a.Username == Username);
 		}
 
-		public bool IsEMailUnique(string EMail)
+		public bool IsEMailUnique(string EMail, int? accountId)
 		{
-			return !DbContext.Account.Any(x => x.EMail == EMail);
+			if (accountId != null)
+			{
+				return !DbContext.Account.Any(a => a.EMail == EMail && a.AccountId != accountId);
+			}
+			return !DbContext.Account.Any(a => a.EMail == EMail);
 		}
 	}
 }

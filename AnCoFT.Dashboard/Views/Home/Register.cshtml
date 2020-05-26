@@ -6,7 +6,23 @@
 
 @{
 	ViewData["Title"] = "Registration";
+	Console.WriteLine(Html.ViewData.ModelState.GetFieldValidationState("Username"));
 }
+
+<style>
+	input.input-validation-error ~ span.invalid-icon {
+		display: inline-flex !important;
+	}
+	input.input-validation-error ~ span.valid-icon {
+		display: none !important;
+	}
+	input.valid ~ span.valid-icon {
+		display: inline-flex !important;
+	}
+	input.valid ~ span.invalid-icon {
+		display: none !important;
+	}
+</style>
 
 <div class="container is-fluid">
 	<div class="columns">
@@ -25,18 +41,12 @@
 						<span class="icon is-small is-left">
 							<i class="fas fa-user"></i>
 						</span>
-						@if (Html.ValidationMessageFor(a => a.Username) == null) //always false even if the validation message at the bottom is not displayed
-						{
-							<span class="icon is-small is-right">
-								<i class="fas fa-check"></i>
-							</span>
-						}
-						else
-						{
-							<span class="icon is-small is-right">
-								<i class="fas fa-exclamation-triangle"></i>
-							</span>
-						}
+						<span class="icon is-small is-right valid-icon" style="display: none;">
+							<i class="fas fa-check"></i>
+						</span>
+						<span class="icon is-small is-right invalid-icon" style="display: none;">
+							<i class="fas fa-exclamation-triangle"></i>
+						</span>
 					</div>
 					<p>@Html.ValidationMessageFor(a => a.Username, "", new { @class = "help is-danger" })</p>
 				</div>
@@ -49,18 +59,12 @@
 								<span class="icon is-small is-left">
 									<i class="fas fa-envelope"></i>
 								</span>
-								@if (Html.ValidationMessageFor(a => a.EMail).Equals(null))
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-check"></i>
-									</span>
-								}
-								else
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-exclamation-triangle"></i>
-									</span>
-								}
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
 							</div>
 							<p>@Html.ValidationMessageFor(a => a.EMail, "", new { @class = "help is-danger" })</p>
 						</div>
@@ -71,18 +75,12 @@
 								<span class="icon is-small is-left">
 									<i class="fas fa-envelope"></i>
 								</span>
-								@if (Html.ValidationMessageFor(a => a.ConfirmEMail) == null)
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-check"></i>
-									</span>
-								}
-								else
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-exclamation-triangle"></i>
-									</span>
-								}
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
 							</div>
 							<p>@Html.ValidationMessageFor(a => a.ConfirmEMail, "", new { @class = "help is-danger" })</p>
 						</div>
@@ -98,18 +96,12 @@
 								<span class="icon is-small is-left">
 									<i class="fas fa-key"></i>
 								</span>
-								@if (Html.ValidationMessageFor(a => a.Password) == null)
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-check"></i>
-									</span>
-								}
-								else
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-exclamation-triangle"></i>
-									</span>
-								}
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
 							</div>
 							<p>@Html.ValidationMessageFor(a => a.Password, "", new { @class = "help is-danger" })</p>
 						</div>
@@ -120,18 +112,12 @@
 								<span class="icon is-small is-left">
 									<i class="fas fa-key"></i>
 								</span>
-								@if (Html.ValidationMessageFor(a => a.ConfirmPassword) == null)
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-check"></i>
-									</span>
-								}
-								else
-								{
-									<span class="icon is-small is-right">
-										<i class="fas fa-exclamation-triangle"></i>
-									</span>
-								}
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
 							</div>
 							<p>@Html.ValidationMessageFor(a => a.ConfirmPassword, "", new { @class = "help is-danger" })</p>
 						</div>

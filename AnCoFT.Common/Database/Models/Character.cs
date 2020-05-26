@@ -5,8 +5,8 @@ namespace AnCoFT.Database.Models
     using System.Collections.Generic;
 
     public class Character
-    {
-        public Character()
+	{
+		public Character()
         {
             this.Name = "";
             this.Level = 1;
