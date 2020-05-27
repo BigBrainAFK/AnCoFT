@@ -109,12 +109,12 @@ namespace AnCoFT.Dashboard.Controllers
 			}
 			catch (AppException ex)
 			{
-				ViewData["message"] = ex.Message;
+				TempData["message"] = ex.Message;
 				return View("~/Views/Home/Register.cshtml", model);
 			}
 		}
 
-		[Authorize]
+		[Authorize(Policy = "Moderator")]
 		[HttpPost("EditCharacter")]
 		[ValidateAntiForgeryToken]
 		public IActionResult EditCharacter([FromForm]CharacterEdit model)
@@ -130,7 +130,7 @@ namespace AnCoFT.Dashboard.Controllers
 
 			if (!model.Hash.SequenceEqual(hash))
 			{
-				ViewBag.message = "CharacterId has been tempered.";
+				TempData["message"] = "CharacterId has been tempered.";
 				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
 			}
 
@@ -147,7 +147,7 @@ namespace AnCoFT.Dashboard.Controllers
 			}
 			catch (AppException ex)
 			{
-				ViewBag.message = ex.Message;
+				TempData["message"] = ex.Message;
 				return RedirectToAction("EditCharacter", "Dashboard", new { id = model.CharacterId });
 			}
 		}
@@ -166,7 +166,7 @@ namespace AnCoFT.Dashboard.Controllers
 
 			if (!model.Hash.SequenceEqual(hash))
 			{
-				ViewBag.message = "AccountId has been tempered.";
+				TempData["message"] = "AccountId has been tempered.";
 				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
 			}
 
@@ -177,16 +177,40 @@ namespace AnCoFT.Dashboard.Controllers
 				if (AccountService.GetAuthLevel(User) < AuthLevel.Admin)
 				{
 					AccountEditUser accountEditUser = _mapper.Map<AccountEditUser>(model);
-					_mapper.Map(accountEditUser, account);
 
 					if (account.Username != accountEditUser.Username)
 					{
-						ViewBag.message = "You can not edit your username.";
+						TempData["message"] = "You can not edit your username.";
 						return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
 					}
+
+					if (!String.IsNullOrEmpty(model.CurrentPassword) && !BCrypt.Net.BCrypt.Verify(model.CurrentPassword, account.Password))
+					{
+						TempData["message"] = "Current password did not match.";
+						return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+					}
+
+					model.Password = !String.IsNullOrEmpty(model.CurrentPassword) ? BCrypt.Net.BCrypt.HashPassword(model.Password) : account.Password;
+
+					_mapper.Map(accountEditUser, account);
 				}
 				else
 				{
+					if (model.AccountId == AccountService.GetUserId(User))
+					{
+						if (!String.IsNullOrEmpty(model.CurrentPassword) && !BCrypt.Net.BCrypt.Verify(model.CurrentPassword, account.Password))
+						{
+							TempData["message"] = "Current password did not match.";
+							return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
+						}
+
+						model.Password = !String.IsNullOrEmpty(model.CurrentPassword) ? BCrypt.Net.BCrypt.HashPassword(model.Password) : account.Password;
+					}
+					else
+					{
+						model.Password = account.Password;
+					}
+
 					_mapper.Map(model, account);
 				}
 
@@ -197,7 +221,7 @@ namespace AnCoFT.Dashboard.Controllers
 			}
 			catch (AppException ex)
 			{
-				ViewBag.message = ex.Message;
+				TempData["message"] = ex.Message;
 				return RedirectToAction("EditAccount", "Dashboard", new { id = model.AccountId });
 			}
 		}

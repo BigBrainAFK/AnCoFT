@@ -18,6 +18,9 @@ namespace AnCoFT.Dashboard.Helpers
 			CreateMap<AccountEdit, Account>();
 			CreateMap<AccountEditUser, Account>();
 			CreateMap<AccountEdit, AccountEditUser>();
+
+			CreateMap<Account, IndexModel>();
+			CreateMap<Character, CharacterStatModel>();
 		}
 	}
 }

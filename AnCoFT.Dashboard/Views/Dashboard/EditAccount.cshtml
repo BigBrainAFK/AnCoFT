@@ -8,94 +8,21 @@
 	ViewData["Title"] = "Dashboard - Editing Account";
 }
 
-<div class="container">
-	<h2 class="subtitle @("has-text-" + textColor)">
-		Account - #@(Model.AccountId)
-	</h2>
-	@Html.AntiForgeryToken()
-	@using (Html.BeginForm("EditAccount", "Account", FormMethod.Post, new { @class = "is-fullwidth" }))
-	{
-		@Html.HiddenFor(a => a.AccountId);
-		@Html.HiddenFor(a => a.Hash);
-		<div class="field is-horizontal">
-			<div class="field-body">
-				<div class="control has-icons-left has-icons-right">
-					@Html.TextBoxFor(a => a.Username, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Charactername" })
-					<span class="icon is-small is-left">
-						<i class="fas fa-user"></i>
-					</span>
-					<span class="icon is-small is-right valid-icon" style="display: none;">
-						<i class="fas fa-check"></i>
-					</span>
-					<span class="icon is-small is-right invalid-icon" style="display: none;">
-						<i class="fas fa-exclamation-triangle"></i>
-					</span>
-					<p>@Html.ValidationMessageFor(a => a.Username, "", new { @class = "help is-danger" })</p>
-				</div>
-				<div class="field is-hidden-mobile"></div>
-				@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
-				{
-					<div class="control">
-						@Html.CheckBoxFor(a => a.Premium, new { @class = "checkbox has-background-" + colorMode + " has-text-" + textColor })
-						@Html.LabelFor(a => a.Premium, new { @class = "checkbox has-background-" + colorMode + " has-text-" + textColor }))
-						<p>@Html.ValidationMessageFor(a => a.Premium, "", new { @class = "help is-danger" })</p>
-					</div>
-				}
-				<div class="field is-hidden-mobile"></div>
-				<div class="field is-hidden-mobile"></div>
-				<div class="field is-hidden-mobile"></div>
-				<div class="field is-hidden-mobile"></div>
-			</div>
-		</div>
-		<br />
-		@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
+	<div class="container">
+		<h2 class="subtitle @("has-text-" + textColor)">
+			Account - #@(Model.AccountId)
+		</h2>
+		@Html.AntiForgeryToken()
+		@using (Html.BeginForm("EditAccount", "Account", FormMethod.Post, new { @class = "is-fullwidth" }))
 		{
+			@Html.HiddenFor(a => a.AccountId);
+			@Html.HiddenFor(a => a.Hash);
 			<div class="field is-horizontal">
 				<div class="field-body">
-					<div class="field">
-						@Html.LabelFor(a => a.Ap, new { @class = "has-text-" + textColor })
-						<div class="control has-icons-left has-icons-right">
-							@Html.TextBoxFor(a => a.Ap, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Gold" })
-							<span class="icon is-small is-left">
-								<i class="fas fa-coins"></i>
-							</span>
-							<span class="icon is-small is-right valid-icon" style="display: none;">
-								<i class="fas fa-check"></i>
-							</span>
-							<span class="icon is-small is-right invalid-icon" style="display: none;">
-								<i class="fas fa-exclamation-triangle"></i>
-							</span>
-						</div>
-						<p>@Html.ValidationMessageFor(a => a.Ap, "", new { @class = "help is-danger" })</p>
-					</div>
-					<div class="field">
-						@Html.LabelFor(a => a.AuthLevel, new { @class = "has-text-" + textColor })
-						<div class="control has-icons-left has-icons-right">
-							@Html.DropDownListFor(c => c.AuthLevel, Html.GetEnumSelectList(typeof(AnCoFT.Database.Models.AuthLevel)), new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Gold" })
-							<span class="icon is-small is-left">
-								<i class="fas fa-hat-wizard"></i>
-							</span>
-							<span class="icon is-small is-right valid-icon" style="display: none;">
-								<i class="fas fa-check"></i>
-							</span>
-							<span class="icon is-small is-right invalid-icon" style="display: none;">
-								<i class="fas fa-exclamation-triangle"></i>
-							</span>
-						</div>
-						<p>@Html.ValidationMessageFor(a => a.AuthLevel, "", new { @class = "help is-danger" })</p>
-					</div>
-				</div>
-			</div>
-			<br />
-		}
-		<div class="field is-horizontal">
-			<div class="field-body">
-				<div class="field">
-					@Html.LabelFor(a => a.EMail, new { @class = "has-text-" + textColor })
 					<div class="control has-icons-left has-icons-right">
-						@Html.TextBoxFor(a => a.EMail, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Gold" })
+						@Html.TextBoxFor(a => a.Username, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Accountname" })
 						<span class="icon is-small is-left">
-							<i class="fas fa-envelope"></i>
+							<i class="fas fa-user"></i>
 						</span>
 						<span class="icon is-small is-right valid-icon" style="display: none;">
 							<i class="fas fa-check"></i>
@@ -103,17 +30,72 @@
 						<span class="icon is-small is-right invalid-icon" style="display: none;">
 							<i class="fas fa-exclamation-triangle"></i>
 						</span>
+						<p>@Html.ValidationMessageFor(a => a.Username, "", new { @class = "help is-danger" })</p>
 					</div>
-					<p>@Html.ValidationMessageFor(a => a.EMail, "", new { @class = "help is-danger" })</p>
+					<div class="field is-hidden-mobile"></div>
+					@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
+					{
+						<div class="control">
+							@Html.CheckBoxFor(a => a.Premium, new { @class = "checkbox has-background-" + colorMode + " has-text-" + textColor })
+							@Html.LabelFor(a => a.Premium, new { @class = "checkbox has-background-" + colorMode + " has-text-" + textColor }))
+							<p>@Html.ValidationMessageFor(a => a.Premium, "", new { @class = "help is-danger" })</p>
+						</div>
+					}
+					<div class="field is-hidden-mobile"></div>
+					<div class="field is-hidden-mobile"></div>
+					<div class="field is-hidden-mobile"></div>
+					<div class="field is-hidden-mobile"></div>
 				</div>
-				@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
-				{
+			</div>
+			<br />
+			@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
+			{
+				<div class="field is-horizontal">
+					<div class="field-body">
+						<div class="field">
+							@Html.LabelFor(a => a.Ap, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.TextBoxFor(a => a.Ap, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "AP" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-money-bill"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.Ap, "", new { @class = "help is-danger" })</p>
+						</div>
+						<div class="field">
+							@Html.LabelFor(a => a.AuthLevel, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.DropDownListFor(c => c.AuthLevel, Html.GetEnumSelectList(typeof(AnCoFT.Database.Models.AuthLevel)), new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor })
+								<span class="icon is-small is-left">
+									<i class="fas fa-hat-wizard"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.AuthLevel, "", new { @class = "help is-danger" })</p>
+						</div>
+					</div>
+				</div>
+				<br />
+			}
+			<div class="field is-horizontal">
+				<div class="field-body">
 					<div class="field">
-						@Html.LabelFor(a => a.Status, new { @class = "has-text-" + textColor })
+						@Html.LabelFor(a => a.EMail, new { @class = "has-text-" + textColor })
 						<div class="control has-icons-left has-icons-right">
-							@Html.TextBoxFor(a => a.Status, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Max Inventory Space" })
+							@Html.TextBoxFor(a => a.EMail, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "E-Mail" })
 							<span class="icon is-small is-left">
-								<i class="fas fa-question-circle"></i>
+								<i class="fas fa-envelope"></i>
 							</span>
 							<span class="icon is-small is-right valid-icon" style="display: none;">
 								<i class="fas fa-check"></i>
@@ -122,17 +104,97 @@
 								<i class="fas fa-exclamation-triangle"></i>
 							</span>
 						</div>
-						<p>@Html.ValidationMessageFor(a => a.Status, "", new { @class = "help is-danger" })</p>
+						<p>@Html.ValidationMessageFor(a => a.EMail, "", new { @class = "help is-danger" })</p>
 					</div>
-				}
+					@if (AccountService.GetAuthLevel(User) >= AnCoFT.Database.Models.AuthLevel.Admin)
+					{
+						<div class="field">
+							@Html.LabelFor(a => a.Status, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.TextBoxFor(a => a.Status, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Status" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-question-circle"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.Status, "", new { @class = "help is-danger" })</p>
+						</div>
+					}
+				</div>
 			</div>
-		</div>
+			@if (AccountService.GetUserId(User) == Model.AccountId)
+			{
+				<br />
+				<div class="field is-horizontal">
+					<div class="field-body">
+						<div class="field is-hidden-mobile"></div>
+						<div class="field">
+							@Html.LabelFor(a => a.CurrentPassword, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.PasswordFor(a => a.CurrentPassword, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Current password" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-key"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.CurrentPassword, "", new { @class = "help is-danger" })</p>
+						</div>
+						<div class="field is-hidden-mobile"></div>
+					</div>
+				</div>
+				<div class="field is-horizontal">
+					<div class="field-body">
+						<div class="field">
+							@Html.LabelFor(a => a.Password, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.PasswordFor(a => a.Password, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "New password" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-key"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.Password, "", new { @class = "help is-danger" })</p>
+						</div>
+						<div class="field">
+							@Html.LabelFor(a => a.ConfirmPassword, new { @class = "has-text-" + textColor })
+							<div class="control has-icons-left has-icons-right">
+								@Html.PasswordFor(c => c.ConfirmPassword, new { @class = "input is-rounded has-background-" + colorMode + " has-text-" + textColor, @placeholder = "Confirm new password" })
+								<span class="icon is-small is-left">
+									<i class="fas fa-key"></i>
+								</span>
+								<span class="icon is-small is-right valid-icon" style="display: none;">
+									<i class="fas fa-check"></i>
+								</span>
+								<span class="icon is-small is-right invalid-icon" style="display: none;">
+									<i class="fas fa-exclamation-triangle"></i>
+								</span>
+							</div>
+							<p>@Html.ValidationMessageFor(a => a.ConfirmPassword, "", new { @class = "help is-danger" })</p>
+						</div>
+					</div>
+				</div>
+				<br />
+			}
 
-		<p>@Html.ValidationMessageFor(a => a.AccountId, "", new { @class = "help is-danger" }))</p>
-		<p class="help is-danger">@ViewBag.message</p>
+			<p class="help is-danger">@TempData["message"]</p>
 
-		<p class="control">
-			<input type="submit" value="Save" class="button is-link" />
-		</p>
-	}
-</div>
+			<p class="control">
+				<input type="submit" value="Save" class="button is-link" />
+			</p>
+		}
+	</div>

@@ -37,7 +37,13 @@ namespace AnCoFT.Dashboard.Controllers
 				return RedirectToAction("Login", "Home");
 			}
 
-			return View();
+			Account account = _accountService.GetById(AccountService.GetUserId(User));
+			IEnumerable<Character> characters = _characterService.GetByAccountId(account.AccountId);
+
+			IndexModel indexModel = _mapper.Map<IndexModel>(account);
+			indexModel.CharacterStats = _mapper.Map<List<CharacterStatModel>>(characters.ToList());
+
+			return View(indexModel);
 		}
 
 		[Authorize(Policy = "Supporter")]
@@ -129,6 +135,20 @@ namespace AnCoFT.Dashboard.Controllers
 			accountEditModel.Hash = SHA3.Net.Sha3.Sha3512().ComputeHash(Encoding.UTF8.GetBytes(account.AccountId.ToString() + _servConfig.secret));
 
 			return View(accountEditModel);
+		}
+
+		[Authorize]
+		[HttpGet]
+		public IActionResult ResetLogin()
+		{
+			if (!User.Identity.IsAuthenticated)
+			{
+				return RedirectToAction("Login", "Home");
+			}
+
+			_accountService.ResetLogin(User);
+
+			return RedirectToAction("Index", "Dashboard");
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

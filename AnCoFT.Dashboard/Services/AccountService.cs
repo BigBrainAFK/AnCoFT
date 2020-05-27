@@ -18,6 +18,7 @@ namespace AnCoFT.Dashboard.Services
 		Account Create(Account account);
 		bool IsUserUnique(string Username, int? accountId);
 		bool IsEMailUnique(string EMail, int? accountId);
+		public void ResetLogin(ClaimsPrincipal User);
 	}
 
 	public class AccountService : IAccountService
@@ -55,7 +56,11 @@ namespace AnCoFT.Dashboard.Services
 			if (!DbContext.Account.Any(a => a.Token == tokenGuid))
 				return false;
 
-			DbContext.Account.First(a => a.Token == tokenGuid).Enabled = true;
+			Account account = DbContext.Account.First(a => a.Token == tokenGuid);
+			account.Enabled = true;
+			account.Token = Guid.Empty;
+
+			DbContext.Update(account);
 			DbContext.SaveChanges();
 
 			return true;
@@ -124,6 +129,21 @@ namespace AnCoFT.Dashboard.Services
 				return !DbContext.Account.Any(a => a.EMail == EMail && a.AccountId != accountId);
 			}
 			return !DbContext.Account.Any(a => a.EMail == EMail);
+		}
+
+		public void ResetLogin(ClaimsPrincipal User)
+		{
+			Account account = GetById(GetUserId(User));
+
+			if (account == null)
+			{
+				return;
+			}
+
+			account.Status = 0;
+
+			DbContext.Update(account);
+			DbContext.SaveChanges();
 		}
 	}
 }

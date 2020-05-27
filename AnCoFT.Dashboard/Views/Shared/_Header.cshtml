@@ -35,3 +35,44 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2@9/dist/sweetalert2.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+
+<script type="text/javascript">
+	function setCookie(name, value, days) {
+		let expires = "";
+		if (days) {
+			const date = new Date();
+			date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+			expires = "; expires=" + date.toUTCString();
+		}
+		document.cookie = name + "=" + (value || "") + expires + "; path=/";
+	}
+
+	function getCookie(name) {
+		let nameEQ = name + "=";
+		let ca = document.cookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+		}
+		return null;
+	}
+
+	function eraseCookie(name) {
+		document.cookie = name + '=; Max-Age=-99999999;';
+	}
+
+	let inherited_Color = "";
+
+	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+		inherited_Color = "DarkMode";
+	} else {
+		inherited_Color = "LightMode";
+	}
+
+	current_Color = getCookie("ColorMode");
+
+	if (!current_Color) {
+		setCookie("ColorMode", inherited_Color);
+	}
+</script>

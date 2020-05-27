@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AnCoFT.Database.Models;
 using AnCoFT.Game.Login;
-using AnCoFT.Networking.Packet;
-using AnCoFT.Networking.Packet.Character;
-using AnCoFT.Networking.Packet.GameServer;
-using AnCoFT.Networking.Packet.Home;
 using AnCoFT.Networking.Packet.Login;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +38,11 @@ namespace AnCoFT.Networking.PacketHandler
 				S2CLoginAnswerPacket loginAnswerPacket = new S2CLoginAnswerPacket(LoginResult.AccountExpired);
 				client.PacketStream.Write(loginAnswerPacket);
 			}
+			else if (account.Status == (int)LoginResult.AlreadyLoggedIn)
+			{
+				S2CLoginAnswerPacket loginAnswerPacket = new S2CLoginAnswerPacket(LoginResult.AlreadyLoggedIn);
+				client.PacketStream.Write(loginAnswerPacket);
+			}
             else
             {
                 S2CLoginAnswerPacket loginAnswerPacket = new S2CLoginAnswerPacket(LoginResult.Success);
@@ -55,6 +56,11 @@ namespace AnCoFT.Networking.PacketHandler
                 S2CGameServerListPacket gameServerListPacket = new S2CGameServerListPacket(gameServerList);
                 client.PacketStream.Write(gameServerListPacket);
                 client.Account = account;
+
+				account.Status = (int)LoginResult.AlreadyLoggedIn;
+
+				client.DatabaseContext.Update(account);
+				client.DatabaseContext.SaveChanges();
             }
         }
 

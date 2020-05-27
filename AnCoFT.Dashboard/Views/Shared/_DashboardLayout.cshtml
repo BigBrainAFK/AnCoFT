@@ -54,7 +54,6 @@
 							<ul class="menu-list">
 								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "ResetLogin" ? " has-background-primary" : ""))" asp-area="" asp-controller="Dashboard" asp-action="ResetLogin">Login Reset</a></li>
 								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "EditAccount" && int.Parse(idParam) == AccountService.GetUserId(User) ? " has-background-primary" : ""))" asp-area="" asp-controller="Dashboard" asp-action="EditAccount">Edit account</a></li>
-								<li><a class="has-background-@(colorMode) has-text-@(textColor)@((action == "Changepassword" ? " has-background-primary" : ""))" asp-area="" asp-controller="Dashboard" asp-action="ChangePassword">Change password</a></li>
 								<li><a class="has-background-@(colorMode) has-text-@(textColor)" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a></li>
 							</ul>
 						</div>

@@ -1,7 +1,103 @@
+@model IndexModel;
+@{
+	string colorMode = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "dark" : "light";
+	string textColor = Context.Request.Cookies["ColorMode"] != null && Context.Request.Cookies["ColorMode"] == "DarkMode" ? "light" : "dark";
+}
+
 @{
 	ViewData["Title"] = "Dashbiard";
 }
 
-<div class="column has-text-centered" id='page'>
-	<img src="~/image/logo.png">
+<div class="column has-text-centered">
+	<div class="columns">
+		<div class="column is-hidden-mobile"></div>
+		<div class="column has-text-justified">
+			@Html.LabelFor(a => a.Username, new { @class = "has-text-" + textColor })
+			<div class="control has-icons-left">
+				@Html.TextBoxFor(a => a.Username, new { @class = "input is-static is-rounded has-background-" + colorMode + " has-text-" + textColor, @disabled = "" })
+				<span class="icon is-small is-left">
+					<i class="fas fa-user"></i>
+				</span>
+			</div>
+			@Html.LabelFor(a => a.Premium, new { @class = "has-text-" + textColor })
+			<div class="control has-icons-left">
+				<input class="input is-static is-rounded has-background-@(colorMode)" />
+				@if (Model.Premium)
+				{
+					<span class="icon is-small is-left">
+						<i class="fas fa-check has-text-success"></i>
+					</span>
+				}
+				else
+				{
+					<span class="icon is-small is-left">
+						<i class="fas fa-times has-text-danger"></i>
+					</span>
+				}
+			</div>
+			@Html.LabelFor(a => a.Ap, new { @class = "has-text-" + textColor })
+			<div class="control has-icons-left">
+				@Html.TextBoxFor(a => a.Ap, new { @class = "input is-static is-rounded has-background-" + colorMode + " has-text-" + textColor, @disabled = "" })
+				<span class="icon is-small is-left">
+					<i class="fas fa-money-bill"></i>
+				</span>
+			</div>
+			<br />
+			<br />
+			<span class="has-text-@(textColor)">
+				Collective Character Stats:
+			</span>
+			<br />
+			<br />
+			@Html.LabelFor(a => a.CharacterStats[0].Level, new { @class = "has-text-" + textColor })
+			<div class="control has-icons-left">
+				<input type="text" class="input is-static is-rounded has-background-@(colorMode) has-text-@(textColor)" value="@(Model.CharacterStats.Sum(c => c.Level))" disabled />
+				<span class="icon is-small is-left">
+					<i class="fas fa-level-up-alt"></i>
+				</span>
+			</div>
+			<div class="columns">
+				<div class="column">
+					@Html.LabelFor(a => a.CharacterStats[0].Exp, new { @class = "has-text-" + textColor })
+					<div class="control has-icons-left">
+						<input type="text" class="input is-static is-rounded has-background-@(colorMode) has-text-@(textColor)" value="@(Model.CharacterStats.Sum(c => c.Exp))" disabled />
+						<span class="icon is-small is-left">
+							<i class="fas fa-battery-quarter"></i>
+						</span>
+					</div>
+				</div>
+				<div class="column">
+					@Html.LabelFor(a => a.CharacterStats[0].Gold, new { @class = "has-text-" + textColor })
+					<div class="control has-icons-left">
+						<input type="text" class="input is-static is-rounded has-background-@(colorMode) has-text-@(textColor)" value="@(Model.CharacterStats.Sum(c => c.Gold))" disabled />
+						<span class="icon is-small is-left">
+							<i class="fas fa-coins"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="columns">
+				<div class="column">
+					@Html.LabelFor(a => a.CharacterStats[0].BattlesWon, new { @class = "has-text-" + textColor })
+					<div class="control has-icons-left">
+						<input type="text" class="input is-static is-rounded has-background-@(colorMode) has-text-@(textColor)" value="@(Model.CharacterStats.Sum(c => c.BattlesWon))" disabled />
+						<span class="icon is-small is-left">
+							<i class="fas fa-trophy"></i>
+						</span>
+					</div>
+				</div>
+				<div class="column">
+					@Html.LabelFor(a => a.CharacterStats[0].BattlesLost, new { @class = "has-text-" + textColor })
+					<div class="control has-icons-left">
+						<input type="text" class="input is-static is-rounded has-background-@(colorMode) has-text-@(textColor)" value="@(Model.CharacterStats.Sum(c => c.BattlesLost))" disabled />
+						<span class="icon is-small is-left fa-stack">
+							<i class="fas fa-trophy fa-stack-1x"></i>
+							<i class="fas fa-ban fa-stack-2x"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="column is-hidden-mobile"></div>
+	</div>
 </div>
