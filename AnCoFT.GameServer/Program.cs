@@ -47,7 +47,7 @@ namespace AnCoFT
                 Console.Write($"\tStarting GameServer-{i}... ");
                 try
                 {
-                    gameServers[i] = new GameServer(serverConfig.gameServAddresses[i].ip, serverConfig.gameServAddresses[i].port, databaseContext, $"GAME-{i}");
+                    gameServers[i] = new GameServer(serverConfig.gameServAddresses[i].ip, serverConfig.gameServAddresses[i].port, serverConfig, $"GAME-{i}");
                     gameServers[i].Start();
                 }
                 catch (Exception ex)

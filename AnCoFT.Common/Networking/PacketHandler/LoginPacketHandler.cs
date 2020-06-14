@@ -57,10 +57,10 @@ namespace AnCoFT.Networking.PacketHandler
                 client.PacketStream.Write(gameServerListPacket);
                 client.Account = account;
 
-				account.Status = (int)LoginResult.AlreadyLoggedIn;
+				//account.Status = (int)LoginResult.AlreadyLoggedIn;
 
-				client.DatabaseContext.Update(account);
-				client.DatabaseContext.SaveChanges();
+				//client.DatabaseContext.Update(account);
+				//client.DatabaseContext.SaveChanges(); // NEED TO REMOVE LATER AND IMPLEMENT PROPPER LOGOUT TIMING
             }
         }
 

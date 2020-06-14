@@ -12,7 +12,7 @@ namespace AnCoFT
 		private static void Main()
         {
 			Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("AnCoFT - Fantasy Tennis Username Server Emulator");
+            Console.WriteLine("AnCoFT - Fantasy Tennis Login Server Emulator");
             Console.WriteLine("---------------------------------------------");
 
             Console.Write("Reading in config files... ");
@@ -43,7 +43,7 @@ namespace AnCoFT
 			LoginServer loginServer;
             try
             {
-                loginServer = new LoginServer(serverConfig.loginServAddress.ip, serverConfig.loginServAddress.port, databaseContext);
+                loginServer = new LoginServer(serverConfig.loginServAddress.ip, serverConfig.loginServAddress.port, serverConfig);
                 loginServer.Start();
             }
             catch (Exception ex)

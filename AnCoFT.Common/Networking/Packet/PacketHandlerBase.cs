@@ -1,4 +1,4 @@
-﻿using AnCoFT.Networking.Packet.Login;
+using AnCoFT.Networking.Packet.Login;
 using AnCoFT.Networking.PacketHandler;
 
 namespace AnCoFT.Networking.Packet
@@ -222,7 +222,7 @@ namespace AnCoFT.Networking.Packet
                     break;
 
                 case PacketId.C2SHeartbeat:
-                    this.HandleTestPacket(client, packet);
+                    this.HandleHeartbeat(client, packet);
                     break;
 
                 case PacketId.C2SLoginAliveClient:
@@ -261,8 +261,8 @@ namespace AnCoFT.Networking.Packet
                     this.Handle3f3Packet(client, packet);
                     break;
 
-                case 0x1B6D:
-                    this.Handle1B6DPacket(client, packet);
+                case 0x1B6D:// Stat Apply Answer
+					this.Handle1B6DPacket(client, packet);
                     break;
 
                 default:
@@ -283,6 +283,12 @@ namespace AnCoFT.Networking.Packet
             S2CDisconnectAnswerPacket disconnectAnswerPacket = new S2CDisconnectAnswerPacket();
             client.PacketStream.Write(disconnectAnswerPacket);
         }
+
+		public void HandleHeartbeat(Client client, Packet packet)
+		{
+			client.LastHeatbeat = DateTime.Now;
+			// Create Heartbeat timeout loop so that clients who havent send a heartbeat since a minute timeout automatically
+		}
 
         // 17E1 - Skip
         public void Handle17D9Packet(Client client, Packet packet)
@@ -485,19 +491,25 @@ namespace AnCoFT.Networking.Packet
 
         }
 
+		// Stat Apply Answer
         public void Handle1B6DPacket(Client client, Packet packet)
         {
             Packet testAnswer = new Packet(0x1B6E);
-            testAnswer.Write((byte)20);
-            testAnswer.Write((byte)20);
-            testAnswer.Write((byte)20);
-            testAnswer.Write((byte)20);
-            testAnswer.Write((byte)20);
-            client.PacketStream.Write(testAnswer);
-            //FIGURE OUT ATTRIBUTES
-            // 00-00-00-00-6E-1B-05-00-14-14-14-14-14
-            // 20 15 0  0  8
-        }
+			testAnswer.Write((byte)5); //???
+			testAnswer.Write((byte)1); //???
+			testAnswer.Write((byte)2); //???
+			testAnswer.Write((byte)3); //???
+            testAnswer.Write((byte)11); //str
+            testAnswer.Write((byte)10); //sta
+            testAnswer.Write((byte)10); //dex
+            testAnswer.Write((byte)10); //will
+            testAnswer.Write((byte)0); //str again?
+            testAnswer.Write((byte)0); //sta again?
+            testAnswer.Write((byte)0); //dex again?
+            testAnswer.Write((byte)0); //will again?
+			client.PacketStream.Write(testAnswer);
+			//FIGURE OUT ATTRIBUTES
+		}
 
         public void HandleWhisperPacket(Client client, Packet packet)
         {

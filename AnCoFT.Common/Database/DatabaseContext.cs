@@ -110,11 +110,11 @@ namespace AnCoFT.Database
 				}
 			});
 
-            modelBuilder.Entity<Character>().HasData(new List<Character>()
-            {
-                new Character() {AccountId = 1, CharacterId = 1, Name = "AnCoFT", Gold = 20000, AlreadyCreated = true, Type = 0},
-                new Character() {AccountId = 2, CharacterId = 2, Name = "AnCoFT2", Gold = 20000, AlreadyCreated = true, Type = 1}
-            });
+			modelBuilder.Entity<Character>().HasData(new List<Character>()
+			{
+				new Character() {AccountId = 1, CharacterId = 1, Name = "AnCoFT", Gold = 20000, AlreadyCreated = true, Type = 0, StatusPoints = 15, Stamina = 10, Strength = 10, Dexterity = 10, Willpower = 10},
+				new Character() {AccountId = 2, CharacterId = 2, Name = "AnCoFT2", Gold = 20000, AlreadyCreated = true, Type = 1, StatusPoints = 15, Stamina = 10, Strength = 10, Dexterity = 10, Willpower = 10}
+			});
 
             modelBuilder.Entity<Guild>().HasData(new List<Guild>()
             {

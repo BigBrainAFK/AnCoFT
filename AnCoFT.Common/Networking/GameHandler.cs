@@ -1,4 +1,4 @@
-﻿namespace AnCoFT.Networking
+namespace AnCoFT.Networking
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -53,6 +53,10 @@
 
         public void RemoveClient(Client client)
         {
+			client.Account.Status = 0;
+			client.DatabaseContext.Update(client.Account);
+			client.DatabaseContext.SaveChanges();
+
             this.Clients.Remove(client);
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace AnCoFT.Networking.Server.Base
+namespace AnCoFT.Networking.Server.Base
 {
     using System.Net;
     using System.Net.Sockets;
@@ -10,13 +10,13 @@
     {
         protected bool Stopped = false;
 
-        protected TcpServer(string ipAddress, int port, DatabaseContext databaseContext)
+        protected TcpServer(string ipAddress, int port, Configuration configuration)
         {
             this.Listener = new TcpListener(IPAddress.Parse(ipAddress), port);
-            this.DatabaseContext = databaseContext;
+            this.ServerConfiguration = configuration;
         }
 
-        protected DatabaseContext DatabaseContext { get; set; }
+        protected Configuration ServerConfiguration { get; set; }
 
         protected TcpListener Listener { get; set; }
 

@@ -15,8 +15,12 @@ namespace AnCoFT.Networking.Server
 
         private readonly string _name;
 
-        public GameServer(string ipAddress, int port, DatabaseContext databaseContext, string name, GameHandler gameHandler = null) : base(ipAddress, port, databaseContext)
+		private readonly DatabaseContext databaseContext;
+
+        public GameServer(string ipAddress, int port, Configuration configuration, string name, GameHandler gameHandler = null) : base(ipAddress, port, configuration)
         {
+			this.databaseContext = new DatabaseContext(configuration.dbConfig);
+
             if (gameHandler == null)
                 this._gameHandler = new GameHandler(databaseContext);
             else
@@ -33,7 +37,7 @@ namespace AnCoFT.Networking.Server
             {
                 try
                 {
-                    Client client = new Client(this.Listener.AcceptTcpClient(), this.DatabaseContext);
+                    Client client = new Client(this.Listener.AcceptTcpClient(), this.ServerConfiguration);
                     this._gameHandler.AddClient(client);
 
                     Thread receivingThread = new Thread(this.ReceivingThread);

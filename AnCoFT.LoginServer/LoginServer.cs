@@ -11,7 +11,7 @@ namespace AnCoFT.Networking.Server
     {
         private readonly PacketHandlerBase _packetHandlerBase = new PacketHandlerBase();
 
-        public LoginServer(string ipAddress, int port, DatabaseContext databaseContext) : base(ipAddress, port, databaseContext)
+        public LoginServer(string ipAddress, int port, Configuration configuration) : base(ipAddress, port, configuration)
         {
         }
 
@@ -22,7 +22,7 @@ namespace AnCoFT.Networking.Server
             {
                 try
                 {
-                    Client client = new Client(this.Listener.AcceptTcpClient(), this.DatabaseContext);
+                    Client client = new Client(this.Listener.AcceptTcpClient(), this.ServerConfiguration);
                     Thread receivingThread = new Thread(this.ReceivingThread);
                     receivingThread.Start(client);
                 }
